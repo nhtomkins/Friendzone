@@ -8,6 +8,8 @@ import IconButton from '@material-ui/core/IconButton';
 import PlaceIcon from '@material-ui/icons/Place';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
+import { motion, AnimatePresence } from 'framer-motion';
+
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -84,7 +86,7 @@ const LineupProfile = () => {
         </Grid>
         <Grid item xs={1}>
           <Box mb={3} display="flex" justifyContent="flex-end" width="350px">
-            <IconButton color="primary">
+            <IconButton color="primary" component={motion.div} whileHover={{ scale: 1.2 }}>
               <ThumbUpIcon color="primary" fontSize="large"/>
             </IconButton>
           </Box>

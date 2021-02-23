@@ -11,6 +11,10 @@ import SearchIcon from '@material-ui/icons/Search';
 import ChatIcon from '@material-ui/icons/Chat';
 import Avatar from '@material-ui/core/Avatar';
 
+import {
+  Link
+} from "react-router-dom";
+
 const useStyles = makeStyles({
   root: {
     flexGrow: 1
@@ -44,8 +48,8 @@ const Header = () => {
                   variant="fullWidth"
                   centered
                 >
-                  <Tab icon={<SearchIcon />} />
-                  <Tab icon={<ChatIcon />} />
+                  <Tab icon={<SearchIcon />} value="/lineup" component={Link} to="/lineup"/>
+                  <Tab icon={<ChatIcon />} value="/messages" component={Link} to="/messages"/>
                 </Tabs>
               </Grid>
             </Grid>
