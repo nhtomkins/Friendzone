@@ -8,22 +8,20 @@ import LineupProfile from './LineupProfile';
 
 const Lineup = () => {
   return (
-    <Container>
-      <Grid container justify={"center"} alignItems={"flex-start"} spacing={6} wrap>
-        <Grid item>
-          <LineupProfile />
-        </Grid>
-        <Grid item>
-          <LineupProfile />
-        </Grid>
-        <Grid item>
-          <LineupProfile />
-        </Grid>
-        <Grid item>
-          <LineupProfile />
-        </Grid>
+    <Grid container justify={"center"} alignItems={"flex-start"} spacing={6} wrap>
+      <Grid item>
+        <LineupProfile />
       </Grid>
-    </Container>
+      <Grid item>
+        <LineupProfile />
+      </Grid>
+      <Grid item>
+        <LineupProfile />
+      </Grid>
+      <Grid item>
+        <LineupProfile />
+      </Grid>
+    </Grid>
   )
 }
 

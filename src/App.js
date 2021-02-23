@@ -25,12 +25,11 @@ export default function App() {
   return (
     <div className="App">
       <Header />
-      <Container>
-        <Box my={4}>
-          <Lineup />
-          <Copyright />
-        </Box>        
-      </Container>       
+      <Box mx={4} my={4}>
+        <Lineup />
+        <Copyright />
+      </Box>        
+      
     </div>
   );
 }
