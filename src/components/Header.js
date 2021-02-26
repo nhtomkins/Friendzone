@@ -11,9 +11,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import ChatIcon from '@material-ui/icons/Chat';
 import Avatar from '@material-ui/core/Avatar';
 
-import {
-  Link
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
