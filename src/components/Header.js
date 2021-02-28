@@ -6,22 +6,33 @@ import React from "react";
 import { Tabs } from "@material-ui/core";
 import Tab from "@material-ui/core/Tab";
 import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
 
 import SearchIcon from '@material-ui/icons/Search';
 import ChatIcon from '@material-ui/icons/Chat';
-import Avatar from '@material-ui/core/Avatar';
 
 import { Link } from "react-router-dom";
 
-const useStyles = makeStyles({
+import ProfileMenu from "./ProfileMenu"
+
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1
   },
   logo: {
     width: 70,
     height: 40
+  },
+  profile: {
+    width: theme.spacing(5),
+    height: theme.spacing(5),
+    border: '1px solid',
+    borderColor: '#FFFFFF',
+    '&:hover': {
+      borderColor: theme.palette.secondary.main
+    },
   }
-});
+}));
 
 const Header = () => {
   const classes = useStyles();
@@ -29,7 +40,7 @@ const Header = () => {
 
   return (
     <nav className={classes.root}>
-      <AppBar position="static" color="default" elevation={1}>
+      <AppBar color="default" elevation={1}>
         <Toolbar variant="dense">
           <Grid justify={"space-between"} container alignItems={"center"}>
             <Grid xs={1} item>
@@ -52,11 +63,12 @@ const Header = () => {
               </Grid>
             </Grid>
             <Grid item xs={1}>
-                <Avatar />
+                <ProfileMenu />
             </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
+      <Toolbar />
     </nav>
   );
 };

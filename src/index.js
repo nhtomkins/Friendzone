@@ -7,14 +7,16 @@ import theme from './theme';
 import {
   BrowserRouter as Router
 } from "react-router-dom";
+import { AuthProvider } from './contexts/AuthContext';
 
 ReactDOM.render(
   <Router>
-    <ThemeProvider theme={theme}>
-    {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-      <CssBaseline />
-      <App />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
+    </AuthProvider>    
   </Router>,  
   document.querySelector('#root'),
 );

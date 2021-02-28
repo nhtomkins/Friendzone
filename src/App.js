@@ -14,9 +14,10 @@ import Header from './components/Header';
 import Lineup from './components/Lineup';
 import Messages from './components/Messages';
 import Home from './components/Home';
-import Signup from './components/Signup';
-import Signin from './components/Signin';
-import { AuthProvider } from './contexts/AuthContext';
+import { useAuth } from './contexts/AuthContext';
+import Profile from './components/Profile';
+import PrivateRoute from './components/PrivateRoute';
+
 
 function Copyright() {
   return (
@@ -28,34 +29,21 @@ function Copyright() {
 
 export default function App() {
   const location = useLocation();
+  const { currentUser } = useAuth()
 
   return (
     <div className="App">
-      <AuthProvider>
-        <Header />
-        <Box mx={4} my={4}>
-          <AnimatePresence>
-            <Switch location={location} key={location.key}>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route path="/lineup">
-                <Lineup />
-              </Route>
-              <Route path="/messages">
-                <Messages />
-              </Route>
-              <Route path="/signup">
-                <Signup />
-              </Route>
-              <Route path="/signin">
-                <Signin />
-              </Route>
-            </Switch>
-          </AnimatePresence>
-        </Box>        
-      </AuthProvider>
-      
+      {currentUser && <Header />}        
+      <Container maxWidth="xl">
+        <AnimatePresence>
+          <Switch location={location} key={location.key}>
+            <Route exact path="/" component={Home} />
+            <PrivateRoute path="/lineup" component={Lineup} />
+            <PrivateRoute path="/messages" component={Messages} />
+            <PrivateRoute path="/profile" component={Profile} />
+          </Switch>
+        </AnimatePresence>
+      </Container> 
     </div>
   );
 }
