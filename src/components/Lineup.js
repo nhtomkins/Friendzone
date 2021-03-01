@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 
 import LineupProfile from './LineupProfile';
 
+import { useAuth } from '../contexts/AuthContext'
+
 const containerVariants = {
   from: {
     x: '-50vw',
@@ -30,6 +32,8 @@ const containerVariants = {
 
 
 const Lineup = () => {
+  const { allUsers } = useAuth()
+
   return (
     <Grid 
     container 
@@ -43,18 +47,11 @@ const Lineup = () => {
     animate="to"
     exit="exit"
     >
-      <Grid item>
-        <LineupProfile />
-      </Grid>
-      <Grid item>
-        <LineupProfile />
-      </Grid>
-      <Grid item>
-        <LineupProfile />
-      </Grid>
-      <Grid item>
-        <LineupProfile />
-      </Grid>
+      {allUsers.map((user, index) => (
+        <Grid item key={index}>
+          <LineupProfile {...user}/>
+        </Grid>
+      ))}
     </Grid>
     
   )

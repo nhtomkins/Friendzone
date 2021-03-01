@@ -9,10 +9,11 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState()
+  const [userData, setUserData] = useState({})
+  const [allUsers, setAllUsers] = useState([])
   const [loading, setLoading] = useState()
 
   function signup(email, password, userDetails) {
-
     return (
       auth.createUserWithEmailAndPassword(email, password)
       .then(userCredential => {
@@ -33,9 +34,41 @@ export const AuthProvider = ({ children }) => {
     return auth.signOut()
   }
 
+  function getUserData(user) {
+    firestore.collection('users').doc(`${user.uid}`).get()
+      .then(docSnapshot => {
+        if(docSnapshot.exists) {
+          setUserData(docSnapshot.data())
+        }
+      })
+      .catch(err => console.error(err))
+  }
+
+  function getAllUsers(user) {
+    firestore.collection('users').get()
+      .then(data => {
+        let users = [];
+        data.forEach((doc) => {
+          if(user.uid !== doc.id) {
+            users.push({
+              ...doc.data()
+            });
+          };        
+        });
+        setAllUsers(users)
+      })
+      .catch(err => console.error(err));
+  }
+
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user)
+      if(user) {
+        getUserData(user)
+        getAllUsers(user)
+      }
+
       setLoading(false)      
     })
 
@@ -45,6 +78,8 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     currentUser,
+    userData,
+    allUsers,
     signup,
     login,
     logout

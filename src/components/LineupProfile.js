@@ -51,7 +51,7 @@ const useStyles = makeStyles({
   }
 });
 
-const LineupProfile = () => {
+const LineupProfile = (props) => {
   const classes = useStyles();
 
   return (
@@ -63,7 +63,7 @@ const LineupProfile = () => {
         <Grid item className={classes.nameage}> 
           <Box display="flex" alignItems="baseline">
             <Box mr={2} maxWidth="300px" textOverflow="clip">
-              <Typography variant="h5"> Leslie </Typography>
+              <Typography variant="h5"> {props.firstname} </Typography>
             </Box>
             <Typography variant="h6"> 34 </Typography>
           </Box>

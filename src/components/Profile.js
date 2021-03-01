@@ -27,7 +27,7 @@ const containerVariants = {
 }
 
 const Profile = () => {
-  const { currentUser } = useAuth()
+  const { currentUser, userData } = useAuth()
 
   return (
     <Grid 
@@ -47,7 +47,8 @@ const Profile = () => {
         <Typography variant="h1"> Profile </Typography>
       </Grid>
       <Grid item>
-        <Typography variant="h4"> {currentUser.email} </Typography>
+        <Typography variant="h4"> {userData.firstname} </Typography>
+        <Typography variant="h4"> {currentUser.email} </Typography>        
       </Grid>
     </Grid>
   )

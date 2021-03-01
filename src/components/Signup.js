@@ -43,6 +43,8 @@ const Signup = () => {
   const emailRef = useRef()
   const passwordRef = useRef()
   const confirmPasswordRef = useRef()
+  const firstNameRef = useRef()
+  const lastNameRef = useRef()
   const { signup } = useAuth()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -58,7 +60,10 @@ const Signup = () => {
     try {
       setError('')
       setLoading(true)
-      await signup(emailRef.current.value, passwordRef.current.value)
+      await signup(emailRef.current.value, passwordRef.current.value, {
+        firstname: firstNameRef.current.value,
+        lastname: lastNameRef.current.value
+      })
       history.push("/lineup")
     } catch {
       setError('Failed to create an account')
@@ -89,6 +94,7 @@ const Signup = () => {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                inputRef={firstNameRef}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -100,6 +106,7 @@ const Signup = () => {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                inputRef={lastNameRef}
               />
             </Grid>
             <Grid item xs={12}>
