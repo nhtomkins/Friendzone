@@ -34,9 +34,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Header = () => {
+const Header = (props) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+
+  const handleValue = (props) => {
+    if(props.location.pathname === "/lineup" || props.location.pathname === "/messages") {
+      return props.location.pathname
+    } else {
+      return false
+    }
+  }
 
   return (
     <nav className={classes.root}>
@@ -51,13 +59,12 @@ const Header = () => {
             <Grid xs={6} item>
               <Grid container justify="center">
                 <Tabs
-                  onChange={(e, v) => setValue(v)}
-                  value={value}
+                  value={handleValue(props)}
                   aria-label="Navigation Tabs"
                   variant="fullWidth"
                   centered
                 >
-                  <Tab icon={<SearchIcon />} value="/lineup" component={Link} to="/lineup"/>
+                  <Tab icon={<SearchIcon />} value="/lineup"  component={Link} to="/lineup"/>
                   <Tab icon={<ChatIcon />} value="/messages" component={Link} to="/messages"/>
                 </Tabs>
               </Grid>

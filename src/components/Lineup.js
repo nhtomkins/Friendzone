@@ -40,7 +40,6 @@ const Lineup = () => {
     justify={"center"} 
     alignItems={"flex-start"} 
     spacing={6} 
-    wrap
     component={motion.div}
     variants={containerVariants}
     initial="from"

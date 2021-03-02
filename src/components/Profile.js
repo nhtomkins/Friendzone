@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext'
+import { Input } from '@material-ui/core';
+import { MergeTypeSharp } from '@material-ui/icons';
 
 const containerVariants = {
   from: {
@@ -27,7 +30,23 @@ const containerVariants = {
 }
 
 const Profile = () => {
-  const { currentUser, userData } = useAuth()
+  const { currentUser, userData, updateUserProfileImg, loadPercent, profileImgUrl } = useAuth()
+  const [file, setFile] = useState(null)
+  const [error, setError] = useState(null)
+
+  const allowedFileTypes = ['image/png', 'image/jpeg']
+
+  const uploadHandler = (e) => {
+    let selected = e.target.files[0];
+    
+    if (selected && allowedFileTypes.includes(selected.type)) {
+      updateUserProfileImg(selected)
+      setError('')
+    } else {
+      setFile(null)
+      setError('Please select an image file')
+    }
+  }
 
   return (
     <Grid 
@@ -36,7 +55,6 @@ const Profile = () => {
       alignItems={"center"} 
       spacing={6}
       direction={"column"}
-      wrap
       component={motion.div}
       variants={containerVariants}
       initial="from"
@@ -47,8 +65,24 @@ const Profile = () => {
         <Typography variant="h1"> Profile </Typography>
       </Grid>
       <Grid item>
+        <img src={profileImgUrl} alt="User profile image"/>
+      </Grid>
+      <Grid item>
         <Typography variant="h4"> {userData.firstname} </Typography>
         <Typography variant="h4"> {currentUser.email} </Typography>        
+      </Grid>
+      <Grid item>
+        <Button 
+          variant="contained" 
+          component="label"
+        > 
+          Upload Image 
+          <Input 
+            type="file" 
+            style={{ display: "none" }}
+            onChange={uploadHandler}
+          />
+        </Button>
       </Grid>
     </Grid>
   )

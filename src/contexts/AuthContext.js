@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { auth, firestore } from '../firebase'
+import { auth, firestore, storage } from '../firebase'
 
 const AuthContext = React.createContext()
 
@@ -11,7 +11,9 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState()
   const [userData, setUserData] = useState({})
   const [allUsers, setAllUsers] = useState([])
-  const [loading, setLoading] = useState()
+  const [loading, setLoading] = useState(true)
+  const [profileImgUrl, setProfileImgUrl] = useState()
+  const [loadPercent, setLoadPercent] = useState(0)
 
   function signup(email, password, userDetails) {
     return (
@@ -39,9 +41,18 @@ export const AuthProvider = ({ children }) => {
       .then(docSnapshot => {
         if(docSnapshot.exists) {
           setUserData(docSnapshot.data())
+          setProfileImgUrl(docSnapshot.data().profileImgUrl)
         }
       })
       .catch(err => console.error(err))
+  }
+
+  function writeUserData(userDetails) {
+    firestore.collection('users').doc(`${currentUser.uid}`).update(userDetails)
+    .then(result => {
+      return result
+    })
+    .catch(err => console.error(err))
   }
 
   function getAllUsers(user) {
@@ -60,6 +71,23 @@ export const AuthProvider = ({ children }) => {
       .catch(err => console.error(err));
   }
 
+  function updateUserProfileImg(file) {
+
+    const imageExtension = file.name.split('.')[file.name.split('.').length - 1];
+    const storageRef = storage.ref(`userProfiles/${currentUser.uid}-1.${imageExtension}`)
+    
+    storageRef.put(file).on('state_changed', (snapshot) => {
+      let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      setLoadPercent(percentage)
+      console.log('Upload is ' + percentage + '% done')
+    }, (err) => {
+      console.error(err)
+    }, async () => {
+      const url = await storageRef.getDownloadURL();
+      writeUserData({ "profileImgUrl": url })
+      setProfileImgUrl(url)
+    })
+  }
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
@@ -80,6 +108,10 @@ export const AuthProvider = ({ children }) => {
     currentUser,
     userData,
     allUsers,
+    loadPercent,
+    profileImgUrl,
+    writeUserData,
+    updateUserProfileImg,
     signup,
     login,
     logout

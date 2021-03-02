@@ -12,9 +12,15 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Alert from '@material-ui/lab/Alert';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import { useAuth } from '../contexts/AuthContext'
+
+import { KeyboardDatePicker } from '@material-ui/pickers';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
 const Signup = () => {
   const classes = useStyles();
   const emailRef = useRef()
@@ -45,10 +50,22 @@ const Signup = () => {
   const confirmPasswordRef = useRef()
   const firstNameRef = useRef()
   const lastNameRef = useRef()
+  const locationRef = useRef()
   const { signup } = useAuth()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const history = useHistory()
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedGender, setSelectedGender] = useState('female');
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
+  const handleGenderChange = (event) => {
+    setSelectedGender(event.target.value);
+  };
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -62,7 +79,10 @@ const Signup = () => {
       setLoading(true)
       await signup(emailRef.current.value, passwordRef.current.value, {
         firstname: firstNameRef.current.value,
-        lastname: lastNameRef.current.value
+        lastname: lastNameRef.current.value,
+        birthday: selectedDate,
+        gender: selectedGender,
+        location: locationRef.current.value
       })
       history.push("/lineup")
     } catch {
@@ -107,6 +127,41 @@ const Signup = () => {
                 name="lastName"
                 autoComplete="lname"
                 inputRef={lastNameRef}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Gender</FormLabel>
+                  <RadioGroup aria-label="gender" name="gender1" value={selectedGender} onChange={handleGenderChange}>
+                    <FormControlLabel value="female" control={<Radio />} label="Female" />
+                    <FormControlLabel value="male" control={<Radio />} label="Male" />
+                    <FormControlLabel value="other" control={<Radio />} label="Other" />
+                  </RadioGroup>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <KeyboardDatePicker
+                variant="inline"
+                format="yyyy/MM/dd"
+                id="birthday"
+                label="Birthday"
+                value={selectedDate}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="location"
+                label="Location"
+                name="location"
+                autoComplete="location"
+                inputRef={locationRef}
               />
             </Grid>
             <Grid item xs={12}>

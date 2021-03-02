@@ -51,13 +51,29 @@ const useStyles = makeStyles({
   }
 });
 
+function calculateAge(birthday) { // birthday is a date
+  if(birthday) {
+    var today = new Date();
+    var birthDate = new Date(birthday.toDate());
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+  }
+}
+
 const LineupProfile = (props) => {
   const classes = useStyles();
 
   return (
     <Grid className={classes.card} container>
       <Grid className={classes.image} item>
-        <img className={classes.img} src="https://static.wikia.nocookie.net/parksandrecreation/images/3/38/Leslie.png"/>
+        {props.profileImgUrl ? <img className={classes.img} src={props.profileImgUrl}/> : 
+        <img className={classes.img} src="https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg"/>
+        }
+        
       </Grid>
       <Grid  item container xs direction="column" className={classes.bio}>
         <Grid item className={classes.nameage}> 
@@ -65,12 +81,13 @@ const LineupProfile = (props) => {
             <Box mr={2} maxWidth="300px" textOverflow="clip">
               <Typography variant="h5"> {props.firstname} </Typography>
             </Box>
-            <Typography variant="h6"> 34 </Typography>
+            <Typography variant="h6"> {calculateAge(props.birthday)} </Typography>
           </Box>
         </Grid>
         <Grid item xs={2}>
           <Typography variant="subtitle2" className={classes.wrapIcon}>
-            <PlaceIcon className={classes.placeIconStyle} color="disabled"/> Sydney
+            <PlaceIcon className={classes.placeIconStyle} color="disabled"/>
+            {props.location}
           </Typography>
         </Grid>
         <Grid item xs>
