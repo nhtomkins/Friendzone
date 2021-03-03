@@ -34,7 +34,7 @@ export default function App() {
   return (
     <div className="App">
       {currentUser && <Header location={location}/>}        
-      <Container maxWidth="xl">
+      <Box mx={2}>
         <AnimatePresence>
           <Switch location={location} key={location.key}>
             <Route exact path="/" component={Home} />
@@ -43,7 +43,7 @@ export default function App() {
             <PrivateRoute path="/profile" component={Profile} />
           </Switch>
         </AnimatePresence>
-      </Container> 
+      </Box> 
     </div>
   );
 }

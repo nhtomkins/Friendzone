@@ -1,7 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Divider from '@material-ui/core/Divider';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
 import { motion } from 'framer-motion';
+import { makeStyles } from '@material-ui/core/styles';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import MessagesLikedUser from './MessagesLikedUser'
+import MessageBubble from './MessageBubble'
+
+import { useAuth } from '../contexts/AuthContext'
+
+const useStyles = makeStyles((theme) => ({
+  likedUsers: {
+    borderRight: '1px solid grey',
+    minWidth: '300px'
+  },
+  page: {
+    height: '95vh'
+  },
+  userList: {
+    width: '100%',
+  },
+}));
 
 const containerVariants = {
   from: {
@@ -26,20 +54,90 @@ const containerVariants = {
 }
 
 
+
 const Messages = () => {
+  const classes = useStyles();
+  const { allUsers } = useAuth()
+  const [openMessage, setOpenMessage] = useState(null)
+
+  const handleClick = (user) => {
+    setOpenMessage(user)
+  }
+
   return (
     <Grid 
       container 
-      justify={"center"} 
-      alignItems={"flex-start"} 
-      spacing={6} 
+      className={classes.page}
+      justify={"flex-start"} 
+      alignItems={"stretch"} 
       component={motion.div}
+      spacing={2}
       variants={containerVariants}
       initial="from"
       animate="to"
       exit="exit"
     >
-      <Typography variant="h1"> Messages </Typography>
+      <Grid item className={classes.likedUsers} xs={3} sm={3} lg={2}>
+        <List className={classes.userList}>
+          {allUsers.map((user, index) => (
+            <React.Fragment key={index}>
+              <ButtonBase onClick={() => handleClick(user)} >
+                <MessagesLikedUser {...user}/>
+              </ButtonBase>
+              <Divider variant="inset" component="li" /> 
+            </React.Fragment>           
+          ))}
+        </List>
+      </Grid>
+      <Grid item xs sm lg container direction="column" alignItems="stretch">
+        <Grid item>
+          <Typography variant="h2">
+            {openMessage && openMessage.firstname}
+          </Typography>
+          <Divider/>
+        </Grid>
+        <Grid item xs container style={{ padding: "20px 0px 0px 12px" }} 
+        direction="column" alignItems="stretch">
+          <Grid item container style={{ paddingBottom: "12px" }} justify='flex-start'> 
+            <MessageBubble 
+              side="left" 
+              message="Wish i could come, but I'm out of town this weekend. Thanks for the invite!"
+            />
+          </Grid>
+          <Grid item container style={{ paddingBottom: "12px" }} justify='flex-end'>
+            <MessageBubble 
+              side="right" 
+              message="All good, enjoy your weekend!"
+            />
+            <MessageBubble 
+              side="right" 
+              message="Oh and one more thing, we are no longer friends"
+            />
+          </Grid>
+          
+        </Grid>
+        <Grid item>
+          <Box display="flex">
+            <TextField 
+              id="message-input"
+              placeholder="Enter a message"
+              variant="outlined"
+              fullWidth
+              margin="dense"
+              multiline
+            />
+            <Button 
+              variant="contained" 
+              disableElevation
+              style={{ width: "80px", height: "40px", marginLeft: "4px", marginTop: "8px" }}
+              color="primary"
+            >
+              SEND
+            </Button>
+          </Box>
+          
+        </Grid>
+      </Grid>
     </Grid>
   )    
 }

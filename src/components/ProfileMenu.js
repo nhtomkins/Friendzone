@@ -31,7 +31,7 @@ const ProfileMenu = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [error, setError ] = useState('')
-  const { currentUser, logout } = useAuth()
+  const { userData, profileImgUrl, logout } = useAuth()
   const history = useHistory()
 
   const handleClick = (event) => {
@@ -57,9 +57,12 @@ const ProfileMenu = () => {
 
   return (
     <div>
-      <Avatar className={classes.profile} onClick={handleClick}>
-        T
-      </Avatar>
+      <Avatar 
+        className={classes.profile} 
+        onClick={handleClick} 
+        alt={userData.firstname}
+        src={profileImgUrl}
+      />
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}

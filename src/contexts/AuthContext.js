@@ -89,6 +89,17 @@ export const AuthProvider = ({ children }) => {
     })
   }
 
+  function sendPrivateMessage(document) {
+    firestore.collection('users').doc(`${currentUser.uid}`).collection('messages').add({
+      "sentAt": firestore.Timestamp.now(),
+      ...document
+    })
+    .then(result => {
+      return result
+    })
+    .catch(err => console.error(err))
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user)
