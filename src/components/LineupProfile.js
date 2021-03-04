@@ -9,6 +9,7 @@ import PlaceIcon from '@material-ui/icons/Place';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../contexts/AuthContext';
 
 
 const useStyles = makeStyles({
@@ -66,6 +67,11 @@ function calculateAge(birthday) { // birthday is a date
 
 const LineupProfile = (props) => {
   const classes = useStyles();
+  const { likeUser } = useAuth()
+
+  const handleLike = () => {
+    likeUser(props)
+  }
 
   return (
     <Grid className={classes.card} container>
@@ -97,7 +103,7 @@ const LineupProfile = (props) => {
         </Grid>
         <Grid item xs={1}>
           <Box mb={3} display="flex" justifyContent="flex-end" width="350px">
-            <IconButton color="primary" component={motion.div} whileHover={{ scale: 1.2 }}>
+            <IconButton onClick={handleLike} color="primary" component={motion.div} whileHover={{ scale: 1.2 }}>
               <ThumbUpIcon color="primary" fontSize="large"/>
             </IconButton>
           </Box>

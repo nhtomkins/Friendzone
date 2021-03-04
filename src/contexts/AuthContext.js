@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { auth, firestore, storage } from '../firebase'
+import firebase from "firebase/app"
 
 const AuthContext = React.createContext()
 
@@ -12,8 +13,9 @@ export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState({})
   const [allUsers, setAllUsers] = useState([])
   const [loading, setLoading] = useState(true)
-  const [profileImgUrl, setProfileImgUrl] = useState()
+  const [friendsLoading, setFriendsLoading] = useState(true)
   const [loadPercent, setLoadPercent] = useState(0)
+  const [friendsProfiles, setFreindsProfiles] = useState(null)
 
   function signup(email, password, userDetails) {
     return (
@@ -22,6 +24,8 @@ export const AuthProvider = ({ children }) => {
         firestore.collection('users').doc(`${userCredential.user.uid}`).set({
           email,
           userId: userCredential.user.uid,
+          likedUsers: [],
+          friends: [],
           ...userDetails
         })
       })
@@ -36,6 +40,7 @@ export const AuthProvider = ({ children }) => {
     return auth.signOut()
   }
 
+  /*
   function getUserData(user) {
     firestore.collection('users').doc(`${user.uid}`).get()
       .then(docSnapshot => {
@@ -46,6 +51,7 @@ export const AuthProvider = ({ children }) => {
       })
       .catch(err => console.error(err))
   }
+  */
 
   function writeUserData(userDetails) {
     firestore.collection('users').doc(`${currentUser.uid}`).update(userDetails)
@@ -85,13 +91,12 @@ export const AuthProvider = ({ children }) => {
     }, async () => {
       const url = await storageRef.getDownloadURL();
       writeUserData({ "profileImgUrl": url })
-      setProfileImgUrl(url)
     })
   }
 
   function sendPrivateMessage(document) {
     firestore.collection('users').doc(`${currentUser.uid}`).collection('messages').add({
-      "sentAt": firestore.Timestamp.now(),
+      sentAt: firebase.firestore.Timestamp.now(),
       ...document
     })
     .then(result => {
@@ -100,19 +105,97 @@ export const AuthProvider = ({ children }) => {
     .catch(err => console.error(err))
   }
 
+  function likeUser(user) {
+    firestore.collection('users').doc(`${currentUser.uid}`).update({
+      likedUsers: firebase.firestore.FieldValue.arrayUnion(user.userId)
+    })
+    .then(result => {
+      if(user.likedUsers.includes(currentUser.uid)) {
+        firestore.collection('users').doc(`${currentUser.uid}`)
+          .collection('friends').doc(`${user.userId}`).set({
+            userId: user.userId,
+            firstname: user.firstname,
+            profileImgUrl: user.profileImgUrl,
+            lastMessage: firebase.firestore.Timestamp.now()
+        }, { merge: true })
+        firestore.collection('users').doc(`${user.userId}`)
+        .collection('friends').doc(`${currentUser.uid}`).set({
+            userId: currentUser.uid,
+            firstname: userData.firstname,
+            profileImgUrl: userData.profileImgUrl,
+            lastMessage: firebase.firestore.Timestamp.now()
+        }, { merge: true })
+      }
+    })
+    .catch(err => console.error(err))
+  }
+
+  function getFriendDataQuick(doc) {
+    let idArray = []                    
+    doc.forEach((profile) => {
+      idArray.push(profile.data().userId)
+    })
+
+    firestore.collection('users').where("userId", "in", idArray).get()
+      .then((snap) => {
+        //console.log(snap)
+        let dataArray = []
+        snap.forEach((data) => {
+          console.log(data.data())
+          dataArray.push(data.data())
+        })
+        console.log(dataArray)
+        setFreindsProfiles(dataArray)
+        setFriendsLoading(false)
+      })     
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user)
       if(user) {
-        getUserData(user)
         getAllUsers(user)
+        //getFriends(user.uid)
       }
-
       setLoading(false)      
     })
 
     return unsubscribe
   }, [])
+
+  useEffect(() => {
+    if(currentUser) {
+      const unsubscribe = firestore.collection('users').doc(`${currentUser.uid}`)
+      .onSnapshot((doc) => {
+        if(doc.exists) {
+          console.log("user snapshot fired")
+          setUserData(doc.data())     
+        }
+      })
+
+      return unsubscribe
+    }
+  }, [currentUser])
+
+  useEffect(() => {
+    if(currentUser) {
+      const unsubscribe = firestore.collection('users').doc(`${currentUser.uid}`).collection('friends')
+      .orderBy('lastMessage', 'desc')
+      .onSnapshot((doc) => {
+        if(doc) {
+          console.log("friends snapshot fired")
+          let friendsArray = []                    
+          doc.forEach((friend) => {
+            friendsArray.push(friend.data())
+          })
+          setFreindsProfiles(friendsArray)
+          setFriendsLoading(false)
+        }
+      })
+
+      return unsubscribe
+    }
+  }, [currentUser])
   
 
   const value = {
@@ -120,12 +203,14 @@ export const AuthProvider = ({ children }) => {
     userData,
     allUsers,
     loadPercent,
-    profileImgUrl,
+    friendsProfiles,
+    friendsLoading,
     writeUserData,
     updateUserProfileImg,
     signup,
     login,
-    logout
+    logout,
+    likeUser
   }
 
   return (

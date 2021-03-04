@@ -30,7 +30,7 @@ const containerVariants = {
 }
 
 const Profile = () => {
-  const { currentUser, userData, updateUserProfileImg, loadPercent, profileImgUrl } = useAuth()
+  const { currentUser, userData, updateUserProfileImg, loadPercent } = useAuth()
   const [file, setFile] = useState(null)
   const [error, setError] = useState(null)
 
@@ -65,7 +65,7 @@ const Profile = () => {
         <Typography variant="h1"> Profile </Typography>
       </Grid>
       <Grid item>
-        <img src={profileImgUrl} alt="User profile image"/>
+        <img src={userData.profileImgUrl} alt="User profile image"/>
       </Grid>
       <Grid item>
         <Typography variant="h4"> {userData.firstname} </Typography>

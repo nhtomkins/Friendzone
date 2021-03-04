@@ -33,7 +33,7 @@ export default function App() {
 
   return (
     <div className="App">
-      {currentUser && <Header location={location}/>}        
+      {currentUser && <Header location={location}/>}      
       <Box mx={2}>
         <AnimatePresence>
           <Switch location={location} key={location.key}>

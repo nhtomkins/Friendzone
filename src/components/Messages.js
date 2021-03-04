@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
@@ -8,15 +8,16 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import { motion } from 'framer-motion';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import MessagesLikedUser from './MessagesLikedUser'
+import FriendsList from './FriendsList'
 import MessageBubble from './MessageBubble'
 
 import { useAuth } from '../contexts/AuthContext'
+import { grey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   likedUsers: {
@@ -28,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
   },
   userList: {
     width: '100%',
+  },
+  userSelect: {
+    borderColor: grey[100]
   },
 }));
 
@@ -57,12 +61,20 @@ const containerVariants = {
 
 const Messages = () => {
   const classes = useStyles();
-  const { allUsers } = useAuth()
-  const [openMessage, setOpenMessage] = useState(null)
+  const theme = useTheme()
+  const { friendsLoading } = useAuth()
+  const [openMessage, setOpenMessage] = useState({})
+  const [friends, setFriends] = useState(null)
 
   const handleClick = (user) => {
     setOpenMessage(user)
   }
+
+  /*useEffect(() => {
+    setFriends(friendsProfiles)
+    
+  }, [friendsProfiles])
+  */
 
   return (
     <Grid 
@@ -78,17 +90,10 @@ const Messages = () => {
       exit="exit"
     >
       <Grid item className={classes.likedUsers} xs={3} sm={3} lg={2}>
-        <List className={classes.userList}>
-          {allUsers.map((user, index) => (
-            <React.Fragment key={index}>
-              <ButtonBase onClick={() => handleClick(user)} >
-                <MessagesLikedUser {...user}/>
-              </ButtonBase>
-              <Divider variant="inset" component="li" /> 
-            </React.Fragment>           
-          ))}
-        </List>
+        {!friendsLoading && <FriendsList />}
       </Grid>
+
+      {openMessage.uid ? 
       <Grid item xs sm lg container direction="column" alignItems="stretch">
         <Grid item>
           <Typography variant="h2">
@@ -114,7 +119,6 @@ const Messages = () => {
               message="Oh and one more thing, we are no longer friends"
             />
           </Grid>
-          
         </Grid>
         <Grid item>
           <Box display="flex">
@@ -135,9 +139,17 @@ const Messages = () => {
               SEND
             </Button>
           </Box>
-          
         </Grid>
       </Grid>
+       :
+      <Grid item xs sm lg container justify="center">
+        <Grid item>
+          <Typography variant="h2">
+            Messages
+          </Typography>
+        </Grid>
+      </Grid>
+      }
     </Grid>
   )    
 }
