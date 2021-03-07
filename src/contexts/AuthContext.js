@@ -14,8 +14,10 @@ export const AuthProvider = ({ children }) => {
   const [allUsers, setAllUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [friendsLoading, setFriendsLoading] = useState(true)
+  const [messagesLoading, setMessagesLoading] = useState(true)
   const [loadPercent, setLoadPercent] = useState(0)
   const [friendsProfiles, setFreindsProfiles] = useState(null)
+  const [messages, setMessages] = useState(null)
 
   function signup(email, password, userDetails) {
     return (
@@ -25,7 +27,6 @@ export const AuthProvider = ({ children }) => {
           email,
           userId: userCredential.user.uid,
           likedUsers: [],
-          friends: [],
           ...userDetails
         })
       })
@@ -94,43 +95,51 @@ export const AuthProvider = ({ children }) => {
     })
   }
 
-  function sendPrivateMessage(document) {
-    firestore.collection('users').doc(`${currentUser.uid}`).collection('messages').add({
-      sentAt: firebase.firestore.Timestamp.now(),
-      ...document
-    })
-    .then(result => {
-      return result
-    })
-    .catch(err => console.error(err))
+  function sendPrivateMessage(message, toUserId) {
+    const sentAt = firebase.firestore.Timestamp.now()
+
+    return (
+      firestore.collection('users').doc(`${currentUser.uid}`).collection('messages').add({
+        sentAt,
+        message,
+        toUserId
+      })
+      .then(result => {
+        firestore.collection('users').doc(`${toUserId}`).collection('messages').add({
+          sentAt,
+          message,
+          fromUserId: currentUser.uid
+        })
+      })
+      .catch(err => console.error(err))
+    )
+    
   }
 
   function likeUser(user) {
-    firestore.collection('users').doc(`${currentUser.uid}`).update({
-      likedUsers: firebase.firestore.FieldValue.arrayUnion(user.userId)
-    })
-    .then(result => {
-      if(user.likedUsers.includes(currentUser.uid)) {
-        firestore.collection('users').doc(`${currentUser.uid}`)
-          .collection('friends').doc(`${user.userId}`).set({
-            userId: user.userId,
-            firstname: user.firstname,
-            profileImgUrl: user.profileImgUrl,
-            lastMessage: firebase.firestore.Timestamp.now()
-        }, { merge: true })
-        firestore.collection('users').doc(`${user.userId}`)
-        .collection('friends').doc(`${currentUser.uid}`).set({
-            userId: currentUser.uid,
-            firstname: userData.firstname,
-            profileImgUrl: userData.profileImgUrl,
-            lastMessage: firebase.firestore.Timestamp.now()
-        }, { merge: true })
-      }
-    })
-    .catch(err => console.error(err))
+    if(!userData.likedUsers.includes(user.userId)) {
+      firestore.collection('users').doc(`${currentUser.uid}`).update({
+        likedUsers: firebase.firestore.FieldValue.arrayUnion(user.userId)
+      })
+      .then(result => {
+        if(user.likedUsers.includes(currentUser.uid)) {
+          firestore.collection('users').doc(`${currentUser.uid}`)
+            .collection('friends').doc(`${user.userId}`).set({
+              userId: user.userId,
+              lastMessage: firebase.firestore.Timestamp.now()
+          }, { merge: true })
+          firestore.collection('users').doc(`${user.userId}`)
+          .collection('friends').doc(`${currentUser.uid}`).set({
+              userId: currentUser.uid,
+              lastMessage: firebase.firestore.Timestamp.now()
+          }, { merge: true })
+        }
+      })
+      .catch(err => console.error(err))
+    }    
   }
 
-  function getFriendDataQuick(doc) {
+  function getFriendData(doc) {
     let idArray = []                    
     doc.forEach((profile) => {
       idArray.push(profile.data().userId)
@@ -138,17 +147,21 @@ export const AuthProvider = ({ children }) => {
 
     firestore.collection('users').where("userId", "in", idArray).get()
       .then((snap) => {
-        //console.log(snap)
         let dataArray = []
         snap.forEach((data) => {
-          console.log(data.data())
           dataArray.push(data.data())
         })
-        console.log(dataArray)
-        setFreindsProfiles(dataArray)
+        let sortedData = []
+        idArray.forEach(uid => {
+          sortedData.push(dataArray.find(value => {
+            return value.userId === uid
+          }))
+        })
+        setFreindsProfiles(sortedData)
         setFriendsLoading(false)
       })     
   }
+
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
@@ -169,7 +182,7 @@ export const AuthProvider = ({ children }) => {
       .onSnapshot((doc) => {
         if(doc.exists) {
           console.log("user snapshot fired")
-          setUserData(doc.data())     
+          setUserData(doc.data())
         }
       })
 
@@ -182,14 +195,31 @@ export const AuthProvider = ({ children }) => {
       const unsubscribe = firestore.collection('users').doc(`${currentUser.uid}`).collection('friends')
       .orderBy('lastMessage', 'desc')
       .onSnapshot((doc) => {
-        if(doc) {
+        if(!doc.empty) {
           console.log("friends snapshot fired")
-          let friendsArray = []                    
-          doc.forEach((friend) => {
-            friendsArray.push(friend.data())
+          getFriendData(doc)
+        }
+      })
+
+      return unsubscribe
+    }
+  }, [currentUser])
+
+  useEffect(() => {
+    if(currentUser) {
+      
+      const unsubscribe = firestore.collection('users').doc(`${currentUser.uid}`).collection('messages')
+      .orderBy('sentAt', 'desc')
+      .onSnapshot((doc) => {
+        if(!doc.empty) {
+          console.log("messages snapshot fired")
+          let messageData = []
+          doc.forEach((msg) => {
+            messageData.push(msg.data())
           })
-          setFreindsProfiles(friendsArray)
-          setFriendsLoading(false)
+          messageData.reverse()
+          setMessages(messageData)
+          setMessagesLoading(false)
         }
       })
 
@@ -205,12 +235,15 @@ export const AuthProvider = ({ children }) => {
     loadPercent,
     friendsProfiles,
     friendsLoading,
+    messages,
+    messagesLoading,
     writeUserData,
     updateUserProfileImg,
     signup,
     login,
     logout,
-    likeUser
+    likeUser,
+    sendPrivateMessage
   }
 
   return (

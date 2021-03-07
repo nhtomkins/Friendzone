@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
@@ -13,7 +13,8 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import FriendsListItem from './FriendsListItem'
+import FriendsList from './FriendsList'
+import MessageBubble from './MessageBubble'
 
 import { useAuth } from '../contexts/AuthContext'
 import { grey } from '@material-ui/core/colors';
@@ -56,34 +57,41 @@ const containerVariants = {
   }
 }
 
+//.filter(value => {
+//  return value.toUserId === openUser.userId || value.fromUserId === openUser.userId
+//})
 
-
-const FriendsList = (props) => {
+const MessageList = ({ openUser }) => {
   const classes = useStyles();
   const theme = useTheme()
-  const { friendsProfiles, messages } = useAuth()
+  const { messages } = useAuth()
 
-  const reverseMessages = messages.slice().reverse()
 
-  return ( 
-    <List className={classes.userList}>
-      {friendsProfiles.map((profile, index) => (
-        <React.Fragment key={index}>
-          <ButtonBase 
-            onClick={() => props.onClick(profile)} 
-            className={classes.userSelect}
-            style={profile.userId === props.openUser.userId ? {borderLeft: `3px solid ${theme.palette.primary.main}`} : {border: "none"}}
-          >
-            <FriendsListItem 
-              {...profile} 
-              {...reverseMessages.find(({ fromUserId, toUserId }) => fromUserId === profile.userId || toUserId === profile.userId)}
-            />
-
-          </ButtonBase>
-        </React.Fragment>           
-      ))}
-    </List>
+  return (
+    <Grid item xs container style={{ padding: "20px 0px 0px 12px" }} 
+      direction="column" alignItems="stretch">
+        {messages
+        .filter((value) => {
+          return value.toUserId === openUser.userId || value.fromUserId === openUser.userId
+        })
+        .map((msg, index) => (
+            <Grid 
+              key={index} 
+              item 
+              container 
+              style={{ /*paddingBottom: "12px" */}} 
+              justify={msg.hasOwnProperty('fromUserId') ? 'flex-start' : 'flex-end'}
+            > 
+              {console.log(msg.message)}
+              <MessageBubble 
+                side={msg.hasOwnProperty('fromUserId') ? "left" : "right"} 
+                message={msg.message}
+              />
+            </Grid>
+            
+        ))}
+    </Grid>     
   )    
 }
 
-export default FriendsList
+export default MessageList

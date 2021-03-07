@@ -17,7 +17,8 @@ const useStyles = makeStyles((theme) => ({
     borderColor: grey[100]
   },
   inline: {
-    display: 'inline'
+    display: 'inline-block',
+    width: '200px'
   }
 }));
 
@@ -61,9 +62,11 @@ const MessagesFriend = (props) => {
               variant="body2"
               component="span"
               className={classes.inline}
+              noWrap
             >
-              Wish I could come, but I'm out of town this…
+              {props.message}
             </Typography>   
+            <br />
             <Typography 
               variant="caption"
               component="span"

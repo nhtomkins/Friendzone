@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
@@ -14,7 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import FriendsList from './FriendsList'
-import MessageBubble from './MessageBubble'
+import MessageList from './MessageList'
 
 import { useAuth } from '../contexts/AuthContext'
 import { grey } from '@material-ui/core/colors';
@@ -62,19 +62,32 @@ const containerVariants = {
 const Messages = () => {
   const classes = useStyles();
   const theme = useTheme()
-  const { friendsLoading } = useAuth()
-  const [openMessage, setOpenMessage] = useState({})
-  const [friends, setFriends] = useState(null)
+  const { friendsLoading, sendPrivateMessage, messagesLoading } = useAuth()
+  const [openUser, setOpenUser] = useState({})
+  const messageRef = useRef()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleClick = (user) => {
-    setOpenMessage(user)
+  function handleClick(user) {
+    setOpenUser(user)
+
   }
 
-  /*useEffect(() => {
-    setFriends(friendsProfiles)
-    
-  }, [friendsProfiles])
-  */
+  async function handleSendMessage(e) {
+    e.preventDefault()
+
+    try {
+      setError('')
+      setLoading(true)
+      await sendPrivateMessage(messageRef.current.value, openUser.userId)
+      messageRef.current.value = ""
+    } catch {
+      setError('Failed to send message')
+    }
+
+    setLoading(false)
+  }
+
 
   return (
     <Grid 
@@ -90,36 +103,21 @@ const Messages = () => {
       exit="exit"
     >
       <Grid item className={classes.likedUsers} xs={3} sm={3} lg={2}>
-        {!friendsLoading && <FriendsList />}
+        {!friendsLoading && !messagesLoading && <FriendsList openUser={openUser} onClick={handleClick}/>}
       </Grid>
 
-      {openMessage.uid ? 
+      {openUser.firstname ? 
+      
       <Grid item xs sm lg container direction="column" alignItems="stretch">
         <Grid item>
           <Typography variant="h2">
-            {openMessage && openMessage.firstname}
+            {openUser && openUser.firstname}
           </Typography>
           <Divider/>
         </Grid>
-        <Grid item xs container style={{ padding: "20px 0px 0px 12px" }} 
-        direction="column" alignItems="stretch">
-          <Grid item container style={{ paddingBottom: "12px" }} justify='flex-start'> 
-            <MessageBubble 
-              side="left" 
-              message="Wish i could come, but I'm out of town this weekend. Thanks for the invite!"
-            />
-          </Grid>
-          <Grid item container style={{ paddingBottom: "12px" }} justify='flex-end'>
-            <MessageBubble 
-              side="right" 
-              message="All good, enjoy your weekend!"
-            />
-            <MessageBubble 
-              side="right" 
-              message="Oh and one more thing, we are no longer friends"
-            />
-          </Grid>
-        </Grid>
+        
+        {!messagesLoading && <MessageList openUser={openUser}/>}
+          
         <Grid item>
           <Box display="flex">
             <TextField 
@@ -129,12 +127,15 @@ const Messages = () => {
               fullWidth
               margin="dense"
               multiline
+              inputRef={messageRef}
             />
             <Button 
               variant="contained" 
               disableElevation
               style={{ width: "80px", height: "40px", marginLeft: "4px", marginTop: "8px" }}
               color="primary"
+              onClick={handleSendMessage}
+              disabled={loading}
             >
               SEND
             </Button>

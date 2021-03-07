@@ -29,8 +29,10 @@ const MessageBubble = (props) => {
           className={classes.bubble}
           style={props.side === "left" ? {
             backgroundColor: grey[300], 
+            whiteSpace: 'pre-line'
           } : { 
-            backgroundColor: theme.palette.secondary.main
+            backgroundColor: theme.palette.secondary.main,
+            whiteSpace: 'pre-line'
           }}
         >
           {props.message}
