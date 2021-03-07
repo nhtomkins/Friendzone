@@ -30,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   userSelect: {
-    borderColor: grey[100]
+    borderColor: grey[100],
+    width: '100%'
   },
 }));
 
@@ -66,9 +67,9 @@ const FriendsList = (props) => {
   const reverseMessages = messages.slice().reverse()
 
   return ( 
-    <List className={classes.userList}>
+    <Grid item container xs direction="column" alignItems="stretch" className={classes.userList} wrap='nowrap'>
       {friendsProfiles.map((profile, index) => (
-        <React.Fragment key={index}>
+        <Grid item container key={index}>
           <ButtonBase 
             onClick={() => props.onClick(profile)} 
             className={classes.userSelect}
@@ -80,9 +81,9 @@ const FriendsList = (props) => {
             />
 
           </ButtonBase>
-        </React.Fragment>           
+        </Grid>           
       ))}
-    </List>
+    </Grid>
   )    
 }
 

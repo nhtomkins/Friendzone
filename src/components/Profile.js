@@ -60,6 +60,8 @@ const Profile = () => {
       initial="from"
       animate="to"
       exit="exit"
+      style={{ overflow: 'auto' }}
+      wrap='nowrap'
     >
       <Grid item>
         <Typography variant="h1"> Profile </Typography>

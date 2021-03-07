@@ -32,9 +32,9 @@ export default function App() {
   const { currentUser } = useAuth()
 
   return (
-    <div className="App">
+    <Box display="flex" height="100vh" flexDirection="column" flexGrow={1} overflow="hidden">
       {currentUser && <Header location={location}/>}      
-      <Box mx={2}>
+      <Box px={2} py={2} display="flex" flexDirection="column" height="calc(100vh - 48px)" flexGrow={1} overflow="hidden">
         <AnimatePresence>
           <Switch location={location} key={location.key}>
             <Route exact path="/" component={Home} />
@@ -44,6 +44,6 @@ export default function App() {
           </Switch>
         </AnimatePresence>
       </Box> 
-    </div>
+    </Box>
   );
 }

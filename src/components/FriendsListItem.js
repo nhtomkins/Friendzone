@@ -17,8 +17,7 @@ const useStyles = makeStyles((theme) => ({
     borderColor: grey[100]
   },
   inline: {
-    display: 'inline-block',
-    width: '200px'
+    display: 'inline-block'
   }
 }));
 
@@ -50,34 +49,38 @@ const MessagesFriend = (props) => {
   const theme = useTheme()
 
   return (
-    <ListItem alignItems="flex-start" >
-      <ListItemAvatar>
-        <Avatar alt={props.firstname} src={props.profileImgUrl} />
-      </ListItemAvatar>
-      <ListItemText
-        primary={props.firstname}
-        secondary={
-          <React.Fragment>
-            <Typography 
-              variant="body2"
-              component="span"
-              className={classes.inline}
-              noWrap
-            >
-              {props.message}
-            </Typography>   
-            <br />
-            <Typography 
-              variant="caption"
-              component="span"
-              className={classes.inline}
-            >
-              10:45pm
-            </Typography>                  
-          </React.Fragment>
-        }
-      />
-    </ListItem>
+    <Grid item container style={{ height: "80px" }} xs={12}>
+      <Grid item xs={3} container justify="center" alignItems="center">
+        <Grid item>
+          <Avatar 
+            alt={props.firstname} 
+            src={props.profileImgUrl} 
+          />
+        </Grid>
+      </Grid>
+      <Grid item container xs={9} alignItems="center" style={{ margin: "10px 0px 10px 0px" }}>
+        <Grid item xs={12}>
+          <Typography align='left' color='textPrimary'>
+            {props.firstname}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography 
+            variant="body2"
+            align='left'
+            noWrap
+            color='textSecondary'
+          >
+            {props.message || "New friend!"}
+          </Typography>   
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="subtitle2" align='left' color='textSecondary' style={{ fontSize: '12px'}}>
+            {props.message ? props.sentAt.toDate().toLocaleString('en-AU') : props.addedOn.toDate().toLocaleString('en-AU')}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Grid>
   )    
 }
 

@@ -6,7 +6,7 @@ import { grey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   bubble: {
-    borderRadius: 16,
+    borderRadius: 12,
     padding: "8px 12px 8px 12px",
     marginBottom: "4px"
   }
@@ -28,7 +28,7 @@ const MessageBubble = (props) => {
         <Typography
           className={classes.bubble}
           style={props.side === "left" ? {
-            backgroundColor: grey[300], 
+            backgroundColor: grey[200], 
             whiteSpace: 'pre-line'
           } : { 
             backgroundColor: theme.palette.secondary.main,
@@ -36,6 +36,9 @@ const MessageBubble = (props) => {
           }}
         >
           {props.message}
+        </Typography>
+        <Typography variant='body2' align='right' style={{ fontSize: "9pt"}}>
+          {props.sentAt.toDate().toLocaleString('en-AU')}
         </Typography>
       </Grid>
     </Grid>

@@ -37,14 +37,17 @@ const Lineup = () => {
   return (
     <Grid 
     container 
-    justify={"center"} 
-    alignItems={"flex-start"} 
-    spacing={6} 
+    justify={"flex-start"} 
+    alignItems={"center"} 
+    spacing={4} 
     component={motion.div}
     variants={containerVariants}
     initial="from"
     animate="to"
     exit="exit"
+    style={{ overflow: 'auto' }}
+    direction="column"
+    wrap='nowrap'
     >
       {allUsers.map((user, index) => (
         <Grid item key={index}>

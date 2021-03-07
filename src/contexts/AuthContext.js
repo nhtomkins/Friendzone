@@ -111,6 +111,16 @@ export const AuthProvider = ({ children }) => {
           fromUserId: currentUser.uid
         })
       })
+      .then(result => {
+        firestore.collection('users').doc(`${currentUser.uid}`).collection('friends').doc(`${toUserId}`).update({
+          lastMessage: sentAt
+        })
+      })
+      .then(result => {
+        firestore.collection('users').doc(`${toUserId}`).collection('friends').doc(`${currentUser.uid}`).update({
+          lastMessage: sentAt
+        })
+      })
       .catch(err => console.error(err))
     )
     
@@ -123,15 +133,18 @@ export const AuthProvider = ({ children }) => {
       })
       .then(result => {
         if(user.likedUsers.includes(currentUser.uid)) {
+          const dbTime = firebase.firestore.Timestamp.now()
           firestore.collection('users').doc(`${currentUser.uid}`)
             .collection('friends').doc(`${user.userId}`).set({
               userId: user.userId,
-              lastMessage: firebase.firestore.Timestamp.now()
+              addedOn: dbTime,
+              lastMessage: dbTime
           }, { merge: true })
           firestore.collection('users').doc(`${user.userId}`)
           .collection('friends').doc(`${currentUser.uid}`).set({
               userId: currentUser.uid,
-              lastMessage: firebase.firestore.Timestamp.now()
+              addedOn: dbTime,
+              lastMessage: dbTime
           }, { merge: true })
         }
       })
@@ -140,9 +153,11 @@ export const AuthProvider = ({ children }) => {
   }
 
   function getFriendData(doc) {
-    let idArray = []                    
+    let idArray = [] 
+    let addedOnArray = []                   
     doc.forEach((profile) => {
       idArray.push(profile.data().userId)
+      addedOnArray.push(profile.data().addedOn)
     })
 
     firestore.collection('users').where("userId", "in", idArray).get()
@@ -152,11 +167,13 @@ export const AuthProvider = ({ children }) => {
           dataArray.push(data.data())
         })
         let sortedData = []
-        idArray.forEach(uid => {
-          sortedData.push(dataArray.find(value => {
-            return value.userId === uid
-          }))
+        idArray.forEach((uid, index) => {
+          sortedData.push({
+            ...dataArray.find(value => { return value.userId === uid }),
+            addedOn: addedOnArray[index]
         })
+        })
+        console.log(sortedData)
         setFreindsProfiles(sortedData)
         setFriendsLoading(false)
       })     

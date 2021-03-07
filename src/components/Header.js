@@ -76,7 +76,7 @@ const Header = (props) => {
           </Grid>
         </Toolbar>
       </AppBar>
-      <Toolbar />
+      <Toolbar variant="dense"/>
     </nav>
   );
 };

@@ -17,13 +17,13 @@ const useStyles = makeStyles({
   },
   img: {
     objectFit: 'cover',
-    width: 200,
+    maxWidth: 200,
     height: 350,
     borderTopLeftRadius: 12,
     borderBottomLeftRadius: 12
   },
   card: {
-    width: 600,
+    maxWidth: 550,
     height: 350,
     background: '#ffffff',
     boxShadow: '0 0 20px 0 rgba(0,0,0,0.12)',
@@ -35,16 +35,16 @@ const useStyles = makeStyles({
     },
   },
   bio: {
-    marginLeft: "25px",
-    maxWidth: "350px"
+    paddingRight: "25px"
   },
   nameage: {
     marginTop: "40px"
   },
   wrapIcon: {
     alignItems: 'center',
-    display: 'inline-flex',
-    marginTop: '4px'
+    display: 'flex',
+    marginTop: '4px',
+    marginBottom: '25px'
   },
   placeIconStyle: {
     marginLeft: '2px',
@@ -75,13 +75,13 @@ const LineupProfile = (props) => {
 
   return (
     <Grid className={classes.card} container>
-      <Grid className={classes.image} item>
+      <Grid className={classes.image} item sm={5} xs={6}>
         {props.profileImgUrl ? <img className={classes.img} src={props.profileImgUrl}/> : 
         <img className={classes.img} src="https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg"/>
         }
         
       </Grid>
-      <Grid  item container xs direction="column" className={classes.bio}>
+      <Grid  item container sm={7} xs={6} direction="column" className={classes.bio} alignItems="stretch">
         <Grid item className={classes.nameage}> 
           <Box display="flex" alignItems="baseline">
             <Box mr={2} maxWidth="300px" textOverflow="clip">
@@ -90,23 +90,25 @@ const LineupProfile = (props) => {
             <Typography variant="h6"> {calculateAge(props.birthday)} </Typography>
           </Box>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item>
           <Typography variant="subtitle2" className={classes.wrapIcon}>
             <PlaceIcon className={classes.placeIconStyle} color="disabled"/>
             {props.location}
-          </Typography>
+          </Typography>  
         </Grid>
         <Grid item xs>
           <Typography variant="body1">
             Bit shy at first but once you get to know me I won't stop talking!
           </Typography>
         </Grid>
-        <Grid item xs={1}>
-          <Box mb={3} display="flex" justifyContent="flex-end" width="350px">
-            <IconButton onClick={handleLike} color="primary" component={motion.div} whileHover={{ scale: 1.2 }}>
-              <ThumbUpIcon color="primary" fontSize="large"/>
-            </IconButton>
-          </Box>
+        <Grid item container justify="flex-start">
+          <Grid item xs={12}>
+            <Box mb={3} display='flex' justifyContent='flex-end'>
+              <IconButton onClick={handleLike} color="primary" component={motion.div} whileHover={{ scale: 1.2 }}>
+                <ThumbUpIcon color="primary" fontSize="large"/>
+              </IconButton>
+            </Box>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

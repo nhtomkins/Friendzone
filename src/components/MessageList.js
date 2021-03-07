@@ -68,8 +68,8 @@ const MessageList = ({ openUser }) => {
 
 
   return (
-    <Grid item xs container style={{ padding: "20px 0px 0px 12px" }} 
-      direction="column" alignItems="stretch">
+    <Grid item xs container style={{ padding: "20px 0px 0px 12px", overflow: 'auto' }} 
+      direction="column" alignItems="stretch" wrap='nowrap'>
         {messages
         .filter((value) => {
           return value.toUserId === openUser.userId || value.fromUserId === openUser.userId
@@ -82,10 +82,10 @@ const MessageList = ({ openUser }) => {
               style={{ /*paddingBottom: "12px" */}} 
               justify={msg.hasOwnProperty('fromUserId') ? 'flex-start' : 'flex-end'}
             > 
-              {console.log(msg.message)}
               <MessageBubble 
                 side={msg.hasOwnProperty('fromUserId') ? "left" : "right"} 
                 message={msg.message}
+                sentAt={msg.sentAt}
               />
             </Grid>
             
