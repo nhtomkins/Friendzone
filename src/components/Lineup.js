@@ -54,7 +54,7 @@ const containerVariants = {
 
 
 const Lineup = () => {
-  const { allUsers } = useAuth()
+  const { allUsers, userData } = useAuth()
   const classes = useStyles();
 
   const [showProfiles, setShowProfiles] = useState('Normal')

@@ -87,9 +87,8 @@ const LineupProfile = (props) => {
       <Grid  item container sm={7} xs={6} direction="column" className={classes.bio} alignItems="stretch">
         <Grid item style={{ paddingTop: "16px"}}>
           <Typography variant="subtitle2" align='center' color='primary'>
-            {props.likedUsers.includes(userData.userId) 
-            && userData.likedUsers.includes(props.userId) ? "You are friends" : 
-            "Already likes you!"}
+            {props.likedUsers?.includes(userData.userId) ? (userData.likedUsers?.includes(props.userId) ? 
+            "You are friends" : "Already likes you!") : userData.likedUsers?.includes(props.userId) && "Liked!"}
           </Typography>
         </Grid>
         <Grid item className={classes.nameage}> 
