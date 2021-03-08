@@ -27,12 +27,13 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
     backgroundColor: "#FFFFFF",
     borderRadius: 14,
-    marginRight: "24px",
-    boxShadow: '-4px 0 20px 0 rgba(0,0,0,0.12)',
+    marginRight: "16px",
+    boxShadow: '0 0 20px 0 rgba(0,0,0,0.12)',
   },
   page: {
-    minHeight: 'calc(100vh - 70px)',
-    overflow: 'hidden'
+    minHeight: 'calc(100vh - 32px)',
+    overflow: 'hidden',
+    padding: "24px 24px 24px 24px"
   },
   userList: {
     width: '100%',
@@ -117,7 +118,7 @@ const Messages = () => {
       wrap='nowrap'
     >
       <Grid item container className={classes.likedUsers} xs={3} sm={3} lg={2} wrap='nowrap'>
-        {!friendsLoading && !messagesLoading && <FriendsList openUser={openUser} onClick={handleClick}/>}
+        {!friendsLoading && <FriendsList openUser={openUser} onClick={handleClick}/>}
       </Grid>
 
       {openUser.firstname ? 
@@ -131,9 +132,12 @@ const Messages = () => {
           <Divider/>
           </Box>
         </Grid>
+        <Grid item xs container style={{ padding: "20px 0px 0px 12px", overflow: 'auto' }} 
+          direction="column" alignItems="stretch" wrap='nowrap'
+        >
+          {!messagesLoading && <MessageList openUser={openUser}/>}
+        </Grid>
         
-        {!messagesLoading && <MessageList openUser={openUser}/>}
-          
         <Grid item>
           <Box display="flex" mx={1}>
             <TextField 

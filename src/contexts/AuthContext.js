@@ -10,7 +10,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState()
-  const [userData, setUserData] = useState({})
+  const [userData, setUserData] = useState([])
   const [allUsers, setAllUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [friendsLoading, setFriendsLoading] = useState(true)
@@ -20,15 +20,19 @@ export const AuthProvider = ({ children }) => {
   const [messages, setMessages] = useState(null)
 
   function signup(email, password, userDetails) {
+    const signupDate = firebase.firestore.Timestamp.now()
+
     return (
       auth.createUserWithEmailAndPassword(email, password)
       .then(userCredential => {
         firestore.collection('users').doc(`${userCredential.user.uid}`).set({
           email,
           userId: userCredential.user.uid,
+          signupDate,
           likedUsers: [],
           ...userDetails
         })
+        .catch(err => console.error(err))
       })
     )
   }
@@ -127,6 +131,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   function likeUser(user) {
+
     if(!userData.likedUsers.includes(user.userId)) {
       firestore.collection('users').doc(`${currentUser.uid}`).update({
         likedUsers: firebase.firestore.FieldValue.arrayUnion(user.userId)
@@ -139,13 +144,13 @@ export const AuthProvider = ({ children }) => {
               userId: user.userId,
               addedOn: dbTime,
               lastMessage: dbTime
-          }, { merge: true })
+          })
           firestore.collection('users').doc(`${user.userId}`)
           .collection('friends').doc(`${currentUser.uid}`).set({
               userId: currentUser.uid,
               addedOn: dbTime,
               lastMessage: dbTime
-          }, { merge: true })
+          })
         }
       })
       .catch(err => console.error(err))
@@ -156,11 +161,12 @@ export const AuthProvider = ({ children }) => {
     let idArray = [] 
     let addedOnArray = []                   
     doc.forEach((profile) => {
-      idArray.push(profile.data().userId)
-      addedOnArray.push(profile.data().addedOn)
+        idArray.push(profile.data().userId)
+        addedOnArray.push(profile.data().addedOn) 
     })
 
-    firestore.collection('users').where("userId", "in", idArray).get()
+    if(idArray.length > 0) {
+      firestore.collection('users').where("userId", "in", idArray).get()
       .then((snap) => {
         let dataArray = []
         snap.forEach((data) => {
@@ -173,10 +179,12 @@ export const AuthProvider = ({ children }) => {
             addedOn: addedOnArray[index]
         })
         })
-        console.log(sortedData)
         setFreindsProfiles(sortedData)
         setFriendsLoading(false)
-      })     
+      })
+      .catch(err => console.error(err))     
+    }
+    
   }
 
 
@@ -187,8 +195,8 @@ export const AuthProvider = ({ children }) => {
         getAllUsers(user)
         //getFriends(user.uid)
       }
-      setLoading(false)      
-    })
+      setLoading(false)     
+    }, (err) => console.error(err))
 
     return unsubscribe
   }, [])
@@ -200,8 +208,9 @@ export const AuthProvider = ({ children }) => {
         if(doc.exists) {
           console.log("user snapshot fired")
           setUserData(doc.data())
+          
         }
-      })
+      }, (err) => console.error(err))
 
       return unsubscribe
     }
@@ -216,7 +225,7 @@ export const AuthProvider = ({ children }) => {
           console.log("friends snapshot fired")
           getFriendData(doc)
         }
-      })
+      }, (err) => console.error(err))
 
       return unsubscribe
     }
@@ -234,11 +243,14 @@ export const AuthProvider = ({ children }) => {
           doc.forEach((msg) => {
             messageData.push(msg.data())
           })
-          messageData.reverse()
-          setMessages(messageData)
-          setMessagesLoading(false)
+
+          if (messageData.length > 0) {
+            messageData.reverse()
+            setMessages(messageData)
+            setMessagesLoading(false)
+          }
         }
-      })
+      }, (err) => console.error(err))
 
       return unsubscribe
     }

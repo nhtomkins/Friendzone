@@ -1,12 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from '@material-ui/core/Container';
+import Box from '@material-ui/core/Box';
 import { motion } from 'framer-motion';
 
 import LineupProfile from './LineupProfile';
 
 import { useAuth } from '../contexts/AuthContext'
+import { Typography } from '@material-ui/core';
+import Chip from '@material-ui/core/Chip';
+import PeopleIcon from '@material-ui/icons/People';
+import DoneIcon from '@material-ui/icons/Done';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
+const useStyles = makeStyles((theme) => ({
+  spacedChips: {
+    '& > *': {
+      margin: theme.spacing(0.5),
+    }
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 100,
+  }
+}));
 
 const containerVariants = {
   from: {
@@ -33,29 +55,125 @@ const containerVariants = {
 
 const Lineup = () => {
   const { allUsers } = useAuth()
+  const classes = useStyles();
+
+  const [showProfiles, setShowProfiles] = useState('Normal')
+
+  const [menFilter, onMenFilter] = useState(true)
+  const [womenFilter, onWomenFilter] = useState(true)
+  const [otherFilter, onOtherFilter] = useState(true)
+
+  const handleChange = (e) => {
+    setShowProfiles(e.target.value)
+  }
+
+
+  const handleClick = (e) => {
+    switch(e.target.innerText) {
+      case 'Men':
+        onMenFilter(value => !value)
+        break;
+      case 'Women':
+        onWomenFilter(value => !value)
+        break;
+      case 'Other':
+        onOtherFilter(value => !value)
+        break;
+    }
+  }
+
+
 
   return (
-    <Grid 
-    container 
-    justify={"flex-start"} 
-    alignItems={"center"} 
-    spacing={4} 
-    component={motion.div}
-    variants={containerVariants}
-    initial="from"
-    animate="to"
-    exit="exit"
-    style={{ overflow: 'auto' }}
-    direction="column"
-    wrap='nowrap'
-    >
-      {allUsers.map((user, index) => (
-        <Grid item key={index}>
-          <LineupProfile {...user}/>
+    <Box style={{ overflow: 'auto' }}>
+      <Container maxWidth="lg" >
+        <Grid 
+          container
+          component={motion.div}
+          variants={containerVariants}
+          initial="from"
+          animate="to"
+          exit="exit"
+          style={{ padding: "24px 8px 24px 8px" }}
+        >
+          <Grid item container md={2} direction="column" style={{ paddingBottom: "24px" }}>
+
+            <Grid item style={{ paddingBottom: "12px" }}>
+              <FormControl className={classes.formControl}>
+                <InputLabel id="show-profiles">Show Profiles</InputLabel>
+                <Select
+                  labelId="show-profiles-label"
+                  id="show-profiles"
+                  value={showProfiles}
+                  onChange={handleChange}
+                >
+                  <MenuItem value={'Normal'}>Normal</MenuItem>
+                  <MenuItem value={'Likes me'}>Likes me</MenuItem>
+                  <MenuItem value={'My likes'}>My likes</MenuItem>
+                  <MenuItem value={'Hidden'}>Hidden</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item>
+              <Typography>
+                Filters
+              </Typography>
+            </Grid>
+            
+            <Grid item className={classes.spacedChips}>
+              <Chip 
+                label="Men"
+                icon={<PeopleIcon />}
+                color={menFilter ? 'secondary' : 'default'}
+                clickable
+                onClick={handleClick}
+              />
+              <Chip 
+                label="Women"
+                icon={<PeopleIcon />}
+                color={womenFilter ? 'secondary' : 'default'}
+                clickable
+                onClick={handleClick}
+              />
+              <Chip 
+                label="Other"
+                icon={<PeopleIcon />}
+                color={otherFilter ? 'secondary' : 'default'}
+                clickable
+                onClick={handleClick}
+              />
+            </Grid>
+            
+
+
+          </Grid>    
+          
+          <Grid 
+            item
+            container 
+            justify={"flex-start"} 
+            alignItems={"center"} 
+            spacing={4} 
+            direction="column"
+            wrap='nowrap'
+            md={8}
+          >
+            {allUsers.map((user, index) => (
+              <Grid item key={index}>
+                <LineupProfile {...user}/>
+              </Grid>
+            ))}
+
+          </Grid>
+
+          <Grid item md={2}>
+
+          </Grid>  
+
         </Grid>
-      ))}
-    </Grid>
-    
+      </Container>
+    </Box>
   )
 }
 

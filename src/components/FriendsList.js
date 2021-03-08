@@ -62,9 +62,11 @@ const containerVariants = {
 const FriendsList = (props) => {
   const classes = useStyles();
   const theme = useTheme()
-  const { friendsProfiles, messages } = useAuth()
+  const { friendsProfiles, messages, messagesLoading } = useAuth()
 
-  const reverseMessages = messages.slice().reverse()
+  const reverseMessages = !messagesLoading ? messages.slice().reverse() : []
+
+
 
   return ( 
     <Grid item container xs direction="column" alignItems="stretch" className={classes.userList} wrap='nowrap'>

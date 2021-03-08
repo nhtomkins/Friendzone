@@ -38,7 +38,7 @@ const useStyles = makeStyles({
     paddingRight: "25px"
   },
   nameage: {
-    marginTop: "40px"
+    marginTop: "16px"
   },
   wrapIcon: {
     alignItems: 'center',
@@ -67,14 +67,17 @@ function calculateAge(birthday) { // birthday is a date
 
 const LineupProfile = (props) => {
   const classes = useStyles();
-  const { likeUser } = useAuth()
+  const { likeUser, userData } = useAuth()
 
   const handleLike = () => {
     likeUser(props)
   }
 
   return (
-    <Grid className={classes.card} container>
+    <Grid 
+      className={classes.card} 
+      container 
+    >
       <Grid className={classes.image} item sm={5} xs={6}>
         {props.profileImgUrl ? <img className={classes.img} src={props.profileImgUrl}/> : 
         <img className={classes.img} src="https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg"/>
@@ -82,6 +85,13 @@ const LineupProfile = (props) => {
         
       </Grid>
       <Grid  item container sm={7} xs={6} direction="column" className={classes.bio} alignItems="stretch">
+        <Grid item style={{ paddingTop: "16px"}}>
+          <Typography variant="subtitle2" align='center' color='primary'>
+            {props.likedUsers.includes(userData.userId) 
+            && userData.likedUsers.includes(props.userId) ? "You are friends" : 
+            "Already likes you!"}
+          </Typography>
+        </Grid>
         <Grid item className={classes.nameage}> 
           <Box display="flex" alignItems="baseline">
             <Box mr={2} maxWidth="300px" textOverflow="clip">
