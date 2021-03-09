@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from '@material-ui/core/Container';
@@ -58,6 +58,9 @@ const Lineup = () => {
   const classes = useStyles();
 
   const [showProfiles, setShowProfiles] = useState('Normal')
+  
+  const [lineup, setLineup] = useState([])
+  const [lineupFiltered, setLineupFiltered] = useState([])
 
   const [menFilter, onMenFilter] = useState(true)
   const [womenFilter, onWomenFilter] = useState(true)
@@ -65,8 +68,60 @@ const Lineup = () => {
 
   const handleChange = (e) => {
     setShowProfiles(e.target.value)
+
+    switch(e.target.value) {
+      case "Normal":
+        setLineup(allUsers)
+        break;
+      case "Likes me":
+        let likesMeArray = []
+        allUsers.forEach(user => {
+          if(user.likedUsers.includes(userData.userId)) {
+            likesMeArray.push(user)
+          }
+        })
+        setLineup(likesMeArray)
+        break;
+      case "My likes":
+        let myLikesArray = []
+        allUsers.forEach(user => {
+          if(userData.likedUsers.includes(user.userId)) {
+            myLikesArray.push(user)
+          }
+        })
+        setLineup(myLikesArray)
+        break;
+      case "Hidden":
+        let hiddenArray = []
+        setLineup(hiddenArray)
+        break;
+    }
+    
   }
 
+
+
+  useEffect(() => {
+    setLineup(allUsers)
+  }, [allUsers])
+
+  useEffect(() => {
+    let filteredLineup = lineup
+    if (!menFilter) {
+      filteredLineup = filteredLineup.filter((profile) => profile.gender !== 'male')
+    }
+    if (!womenFilter) {
+      filteredLineup = filteredLineup.filter((profile) => profile.gender !== 'female')
+    }
+    if (!otherFilter) {
+      filteredLineup = filteredLineup.filter((profile) => profile.gender !== 'other')
+    }
+    
+    setLineupFiltered(filteredLineup)
+  }, [lineup, menFilter, womenFilter, otherFilter])
+
+
+  
 
   const handleClick = (e) => {
     switch(e.target.innerText) {
@@ -159,7 +214,7 @@ const Lineup = () => {
             wrap='nowrap'
             md={8}
           >
-            {allUsers.map((user, index) => (
+            {lineupFiltered.map((user, index) => (
               <Grid item key={index}>
                 <LineupProfile {...user}/>
               </Grid>

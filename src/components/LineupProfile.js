@@ -1,6 +1,6 @@
 import React from 'react'
 import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
@@ -11,31 +11,38 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-const useStyles = makeStyles({
+
+const useStyles = makeStyles((theme) => ({
   image: {
+    display: 'flex',
+    justifyContent: 'center',    
   },
-  img: {
-    objectFit: 'cover',
-    maxWidth: 200,
+  imgTop: {    
+      objectFit: 'cover',
+      width: '100%',
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12
+      //maxHeight: 400
+  },
+  imgLeft : {
+    width: '100%',
     height: 350,
+    objectFit: 'cover',
     borderTopLeftRadius: 12,
     borderBottomLeftRadius: 12
   },
   card: {
-    maxWidth: 550,
-    height: 350,
+    maxWidth: 600,
+    //height: 350,
     background: '#ffffff',
     boxShadow: '0 0 20px 0 rgba(0,0,0,0.12)',
-    borderRadius: 12,
-    transition: '0.2s',
-    '&:hover': {
-      transform: 'translateY(-4px)',
-      boxShadow: '0 4px 20px 0 rgba(0,0,0,0.2)',
-    },
+    borderRadius: 12
   },
   bio: {
-    paddingRight: "25px"
+    paddingRight: "24px",
+    paddingLeft: "24px"
   },
   nameage: {
     marginTop: "16px"
@@ -50,23 +57,14 @@ const useStyles = makeStyles({
     marginLeft: '2px',
     marginRight: '2px'
   }
-});
+}));
 
-function calculateAge(birthday) { // birthday is a date
-  if(birthday) {
-    var today = new Date();
-    var birthDate = new Date(birthday.toDate());
-    var age = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-    }
-    return age;
-  }
-}
 
-const LineupProfile = (props) => {
+
+const LineupProfile = ({ forceMobile = false, ...props}) => {
   const classes = useStyles();
+  const theme = useTheme()
+  const mobile = useMediaQuery(theme.breakpoints.only('xs'))
   const { likeUser, userData } = useAuth()
 
   const handleLike = () => {
@@ -76,15 +74,20 @@ const LineupProfile = (props) => {
   return (
     <Grid 
       className={classes.card} 
-      container 
+      container
+      justify="center"
+      component={motion.div} 
+      whileHover={{ y: '-4px', boxShadow: '0 4px 20px 0 rgba(0,0,0,0.2)' }}
+      transition={{ duration: 0.2 }}
     >
-      <Grid className={classes.image} item sm={5} xs={6}>
-        {props.profileImgUrl ? <img className={classes.img} src={props.profileImgUrl}/> : 
-        <img className={classes.img} src="https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg"/>
+      <Grid className={classes.image} item sm={forceMobile || mobile ? 12 : 4} xs={12}>
+        {props.profileImgUrl ? 
+        <img className={forceMobile || mobile ? classes.imgTop : classes.imgLeft} src={props.profileImgUrl}/> : 
+        <img className={forceMobile || mobile ? classes.imgTop : classes.imgLeft} src="https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg"/>
         }
         
       </Grid>
-      <Grid  item container sm={7} xs={6} direction="column" className={classes.bio} alignItems="stretch">
+      <Grid  item container sm={forceMobile || mobile ? 12 : 8} xs={12} direction="column" className={classes.bio} alignItems="stretch">
         <Grid item style={{ paddingTop: "16px"}}>
           <Typography variant="subtitle2" align='center' color='primary'>
             {props.likedUsers?.includes(userData.userId) ? (userData.likedUsers?.includes(props.userId) ? 
@@ -113,8 +116,16 @@ const LineupProfile = (props) => {
         <Grid item container justify="flex-start">
           <Grid item xs={12}>
             <Box mb={3} display='flex' justifyContent='flex-end'>
-              <IconButton onClick={handleLike} color="primary" component={motion.div} whileHover={{ scale: 1.2 }}>
-                <ThumbUpIcon color="primary" fontSize="large"/>
+              <IconButton onClick={handleLike} 
+              color="primary" 
+              component={motion.div} 
+              whileHover={{ scale: 1.2 }}
+              disabled={userData.likedUsers?.includes(props.userId)}
+              >
+                {!userData.likedUsers?.includes(props.userId) &&
+                  <ThumbUpIcon color="primary" fontSize="large"/>
+                }
+                
               </IconButton>
             </Box>
           </Grid>
@@ -123,5 +134,6 @@ const LineupProfile = (props) => {
     </Grid>
   )
 }
+
 
 export default LineupProfile

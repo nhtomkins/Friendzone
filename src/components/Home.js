@@ -54,7 +54,7 @@ const NoUserHome = () => {
     setOpen(false)
   }
   return (
-    <div>
+    <div >
       <Grid container 
         alignItems={"center"} 
         direction="column"
@@ -92,6 +92,7 @@ const NoUserHome = () => {
           className={classes.Modal}
           closeAfterTransition
           BackdropComponent={Backdrop}
+          style={{ overflow: 'auto' }}
         >
           <Container maxWidth="xs">
             <Paper>

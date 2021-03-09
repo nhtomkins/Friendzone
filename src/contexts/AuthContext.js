@@ -4,6 +4,20 @@ import firebase from "firebase/app"
 
 const AuthContext = React.createContext()
 
+function calculateAge(birthday) { // birthday is a date
+  if(birthday) {
+    var today = new Date();
+    //var birthDate = new Date(birthday.toDate());
+    var age = today.getFullYear() - birthday.getFullYear();
+    var m = today.getMonth() - birthday.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthday.getDate())) {
+        age--;
+    }
+    
+    return age;
+  }
+}
+
 export const useAuth = () => {
   return useContext(AuthContext)
 }
@@ -21,19 +35,31 @@ export const AuthProvider = ({ children }) => {
 
   function signup(email, password, userDetails) {
     const signupDate = firebase.firestore.Timestamp.now()
+    const userAge = calculateAge(userDetails.birthday)
+    let userId = ''
 
     return (
       auth.createUserWithEmailAndPassword(email, password)
       .then(userCredential => {
-        firestore.collection('users').doc(`${userCredential.user.uid}`).set({
-          email,
-          userId: userCredential.user.uid,
+        userId = userCredential.user.uid
+        firestore.collection('users').doc(`${userId}`).set({
+          userId,
           signupDate,
           likedUsers: [],
-          ...userDetails
+          firstname: userDetails.firstname,
+          gender: userDetails.gender,
+          city: userDetails.city,
+          age: userAge
         })
-        .catch(err => console.error(err))
       })
+      .then(() => {
+        firestore.collection('users').doc(`${userId}`).collection('private').add({
+          birthday: userDetails.birthday,
+          lastname: userDetails.lastname,
+          email
+        })
+      })
+      .catch(err => console.error(err))
     )
   }
 

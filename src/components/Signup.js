@@ -28,6 +28,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    overflow: 'auto'
+    
   },
   avatar: {
     margin: theme.spacing(1),
@@ -50,7 +52,7 @@ const Signup = () => {
   const confirmPasswordRef = useRef()
   const firstNameRef = useRef()
   const lastNameRef = useRef()
-  const locationRef = useRef()
+  const cityRef = useRef()
   const { signup } = useAuth()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -69,7 +71,7 @@ const Signup = () => {
 
   async function handleSubmit(e) {
     e.preventDefault()
-
+    
     if (passwordRef.current.value !== confirmPasswordRef.current.value) {
       return setError('Passwords do not match')
     }
@@ -82,7 +84,7 @@ const Signup = () => {
         lastname: lastNameRef.current.value,
         birthday: selectedDate,
         gender: selectedGender,
-        location: locationRef.current.value
+        city: cityRef.current.value
       })
       history.push("/lineup")
     } catch {
@@ -93,7 +95,7 @@ const Signup = () => {
   }
 
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="xs" >
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -157,11 +159,11 @@ const Signup = () => {
                 variant="outlined"
                 required
                 fullWidth
-                id="location"
-                label="Location"
-                name="location"
-                autoComplete="location"
-                inputRef={locationRef}
+                id="city"
+                label="City"
+                name="city"
+                autoComplete="City"
+                inputRef={cityRef}
               />
             </Grid>
             <Grid item xs={12}>
