@@ -93,19 +93,21 @@ export const AuthProvider = ({ children }) => {
   }
 
   function getAllUsers(user) {
-    firestore.collection('users').get()
-      .then(data => {
-        let users = [];
-        data.forEach((doc) => {
-          if(user.uid !== doc.id) {
-            users.push({
-              ...doc.data()
-            });
-          };        
-        });
-        setAllUsers(users)
-      })
-      .catch(err => console.error(err));
+    return (
+      firestore.collection('users').get()
+        .then(data => {
+          let users = [];
+          data.forEach((doc) => {
+            if(user.uid !== doc.id) {
+              users.push({
+                ...doc.data()
+              });
+            };        
+          });
+          setAllUsers(users)
+        })
+        .catch(err => console.error(err))
+    )
   }
 
   function updateUserProfileImg(file) {
@@ -213,15 +215,28 @@ export const AuthProvider = ({ children }) => {
     
   }
 
+  async function getInterestsData() {
+    let interestsData = {}
+    firestore.collection('interests').get()
+    .then((snap) => {
+      snap.forEach((doc) => {
+        interestsData[`${doc.data().category}`] = doc.data().interests
+      })  
+        
+    })
+    .catch((err) => console.error(err))
+    return interestsData
+  }
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user)
       if(user) {
-        getAllUsers(user)
+        getAllUsers(user)          
         //getFriends(user.uid)
+          
       }
-      setLoading(false)     
+      setLoading(false) 
     }, (err) => console.error(err))
 
     return unsubscribe
@@ -234,7 +249,7 @@ export const AuthProvider = ({ children }) => {
         if(doc.exists) {
           console.log("user snapshot fired")
           setUserData(doc.data())
-          
+
         }
       }, (err) => console.error(err))
 
@@ -298,7 +313,8 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     likeUser,
-    sendPrivateMessage
+    sendPrivateMessage,
+    getInterestsData
   }
 
   return (

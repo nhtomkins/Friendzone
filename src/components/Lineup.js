@@ -100,7 +100,6 @@ const Lineup = () => {
   }
 
 
-
   useEffect(() => {
     setLineup(allUsers)
   }, [allUsers])
@@ -119,24 +118,6 @@ const Lineup = () => {
     
     setLineupFiltered(filteredLineup)
   }, [lineup, menFilter, womenFilter, otherFilter])
-
-
-  
-
-  const handleClick = (e) => {
-    switch(e.target.innerText) {
-      case 'Men':
-        onMenFilter(value => !value)
-        break;
-      case 'Women':
-        onWomenFilter(value => !value)
-        break;
-      case 'Other':
-        onOtherFilter(value => !value)
-        break;
-    }
-  }
-
 
 
   return (
@@ -182,21 +163,21 @@ const Lineup = () => {
                 icon={<PeopleIcon />}
                 color={menFilter ? 'secondary' : 'default'}
                 clickable
-                onClick={handleClick}
+                onClick={() => onMenFilter(value => !value)}
               />
               <Chip 
                 label="Women"
                 icon={<PeopleIcon />}
                 color={womenFilter ? 'secondary' : 'default'}
                 clickable
-                onClick={handleClick}
+                onClick={() => onWomenFilter(value => !value)}
               />
               <Chip 
                 label="Other"
                 icon={<PeopleIcon />}
                 color={otherFilter ? 'secondary' : 'default'}
                 clickable
-                onClick={handleClick}
+                onClick={() => onOtherFilter(value => !value)}
               />
             </Grid>
             

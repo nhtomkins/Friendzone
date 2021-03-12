@@ -2,10 +2,27 @@ import React, { useEffect, useState } from 'react'
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext'
 import { Input } from '@material-ui/core';
 import { MergeTypeSharp } from '@material-ui/icons';
+import { makeStyles } from "@material-ui/core/styles";
+
+import { interests } from '../data/interestsdata'
+
+const useStyles = makeStyles((theme) => ({
+  spacedChips: {
+    '& > *': {
+      margin: theme.spacing(0.5),
+    }
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 100,
+  }
+}));
+
 
 const containerVariants = {
   from: {
@@ -30,9 +47,12 @@ const containerVariants = {
 }
 
 const Profile = () => {
-  const { currentUser, userData, updateUserProfileImg, loadPercent } = useAuth()
+  const classes = useStyles();
+  const { currentUser, userData, updateUserProfileImg, loadPercent, getInterestsData } = useAuth()
   const [file, setFile] = useState(null)
   const [error, setError] = useState(null)
+  const [interestData, setInterestData] = useState({})
+  const [loading, setLoading] = useState(true)
 
   const allowedFileTypes = ['image/png', 'image/jpeg']
 
@@ -47,6 +67,18 @@ const Profile = () => {
       setError('Please select an image file')
     }
   }
+
+  useEffect(() => {
+    async function fetchInterestData() {
+      let response = await getInterestsData()
+      setInterestData(response)
+      
+    }
+
+    fetchInterestData()
+    setLoading(false)
+    
+  }, [])
 
   return (
     <Grid 
@@ -63,11 +95,19 @@ const Profile = () => {
       style={{ overflow: 'auto' }}
       wrap='nowrap'
     >
+      {loading ? 
+      <Grid item>
+        <Typography>
+          Loading
+        </Typography>
+      </Grid>
+      :
+      <>
       <Grid item>
         <Typography variant="h1"> Profile </Typography>
       </Grid>
-      <Grid item>
-        <img src={userData.profileImgUrl} alt="User profile image"/>
+      <Grid item style={{ display: "flex", justifyContent: "center"}}>
+        <img style={{ width: "50%" }} src={userData.profileImgUrl} alt="User profile image"/>
       </Grid>
       <Grid item>
         <Typography variant="h4"> {userData.firstname} </Typography>
@@ -86,7 +126,18 @@ const Profile = () => {
           />
         </Button>
       </Grid>
-    </Grid>
+      <Grid item className={classes.spacedChips}>
+        {interests.map((interest, index) => (
+          <React.Fragment key={index}>
+            <Chip label={interest} clickable />
+          </React.Fragment>          
+        ))}
+        
+      </Grid>
+    
+      </>
+      }
+      </Grid>
   )
 }
 

@@ -89,7 +89,7 @@ const Messages = () => {
       exit="exit"
       wrap='nowrap'
     >
-      {!messagesColumn && openUser.firstname && !messagesLoading ? <MessageWindow openUser={openUser} onClick={handleClick}/>
+      {!messagesColumn && openUser.firstname ? <MessageWindow openUser={openUser} onClick={handleClick}/>
         :
       <Grid item container className={classes.likedUsers} sm={3} lg={2} wrap='nowrap'>
         {!friendsLoading && <FriendsList openUser={openUser} onClick={handleClick}/>}
@@ -99,7 +99,7 @@ const Messages = () => {
       {messagesColumn &&
       openUser.firstname ? 
       <>
-      {!messagesLoading && <MessageWindow openUser={openUser} onClick={handleClick}/>}
+      <MessageWindow openUser={openUser} onClick={handleClick}/>
       
       {profileColumn &&
         <Grid item lg={3} 
