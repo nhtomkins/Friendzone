@@ -35,7 +35,7 @@ export default function App() {
     <Box display="flex" height="100vh" flexDirection="column" flexGrow={1} overflow="hidden">
       {currentUser && <Header location={location}/>}      
       <Box display="flex" flexDirection="column" height="calc(100vh - 48px)" flexGrow={1} overflow="hidden">
-        <AnimatePresence>
+        <AnimatePresence exitBeforeEnter initial={false}>
           <Switch location={location} key={location.key}>
             <Route exact path="/" component={Home} />
             <PrivateRoute path="/lineup" component={Lineup} />

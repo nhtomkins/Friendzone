@@ -16,11 +16,19 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import { useAuth } from '../contexts/AuthContext'
 
 import { KeyboardDatePicker } from '@material-ui/pickers';
+
+const cities = [
+  "Brisbane",
+  "Melbourne",
+  "Perth",
+  "Sydney"
+]
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -52,7 +60,7 @@ const Signup = () => {
   const confirmPasswordRef = useRef()
   const firstNameRef = useRef()
   const lastNameRef = useRef()
-  const cityRef = useRef()
+  //const cityRef = useRef()
   const { signup } = useAuth()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -60,6 +68,7 @@ const Signup = () => {
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedGender, setSelectedGender] = useState('female');
+  const [selectedCity, setSelectedCity] = useState('')
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -68,6 +77,10 @@ const Signup = () => {
   const handleGenderChange = (event) => {
     setSelectedGender(event.target.value);
   };
+
+  const handleCityChange = (event) => {
+    setSelectedCity(event.target.value)
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -84,7 +97,7 @@ const Signup = () => {
         lastname: lastNameRef.current.value,
         birthday: selectedDate,
         gender: selectedGender,
-        city: cityRef.current.value
+        city: selectedCity
       })
       history.push("/lineup")
     } catch {
@@ -156,15 +169,21 @@ const Signup = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                select
                 variant="outlined"
                 required
                 fullWidth
                 id="city"
                 label="City"
-                name="city"
-                autoComplete="City"
-                inputRef={cityRef}
-              />
+                value={selectedCity}
+                onChange={handleCityChange}
+              >
+                {cities.map((option, index) => (
+                  <MenuItem key={index} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
             <Grid item xs={12}>
               <TextField
