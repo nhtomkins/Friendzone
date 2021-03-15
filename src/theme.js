@@ -1,5 +1,5 @@
-import { red } from '@material-ui/core/colors';
-import { createMuiTheme } from '@material-ui/core/styles';
+import { red } from '@material-ui/core/colors'
+import { createMuiTheme } from '@material-ui/core/styles'
 
 // A custom theme for this app
 const theme = createMuiTheme({
@@ -16,6 +16,12 @@ const theme = createMuiTheme({
     background: {
       default: '#f0f0f0',
     },
+    lifestyle: {
+      main: '#ff7a45',
+    },
+    activities: {
+      main: '#a47aff',
+    },
   },
   typography: {
     h5: {
@@ -28,7 +34,7 @@ const theme = createMuiTheme({
       color: '#727272',
       fontWeight: 300,
     },
-  }
-});
+  },
+})
 
-export default theme;
+export default theme

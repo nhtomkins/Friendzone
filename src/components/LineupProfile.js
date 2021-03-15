@@ -198,8 +198,7 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
               </Grid>
               <Grid item sm={7} xs={12} className={classes.interestText}>
                 <Typography variant="h5" style={{ color: '#ff7a45' }}>
-                  {' '}
-                  Lifestyle{' '}
+                  Lifestyle
                 </Typography>
               </Grid>
               <Grid

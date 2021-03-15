@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import { useAuth } from '../contexts/AuthContext'
 import { Input } from '@material-ui/core'
 import { MergeTypeSharp } from '@material-ui/icons'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
 import { interests } from '../data/interestsdata'
 import Container from '@material-ui/core/Container'
 import Box from '@material-ui/core/Box'
@@ -50,6 +50,7 @@ const containerVariants = {
 
 const Profile = () => {
   const classes = useStyles()
+  const theme = useTheme()
   const {
     currentUser,
     userData,
@@ -61,6 +62,9 @@ const Profile = () => {
   const [error, setError] = useState(null)
   const [interestData, setInterestData] = useState(null)
   const [loading, setLoading] = useState(true)
+
+  const [lifestyle, setLifestyle] = useState([])
+  const [activities, setActivities] = useState([])
 
   const allowedFileTypes = ['image/png', 'image/jpeg']
 
@@ -76,12 +80,42 @@ const Profile = () => {
     }
   }
 
+  const handleClickChip = (category, item) => {
+    switch (category) {
+      case 'lifestyle':
+        if (lifestyle.includes(item)) {
+          const newLifestyle = lifestyle.filter((data) => data !== item)
+          setLifestyle(newLifestyle)
+        } else {
+          setLifestyle((current) => [...current, item])
+        }
+        break
+      case 'activities':
+        if (activities.includes(item)) {
+          const newActivities = activities.filter((data) => data !== item)
+          setActivities(newActivities)
+        } else {
+          setActivities((current) => [...current, item])
+        }
+        break
+    }
+  }
+
+  const checkSelected = (category, item) => {
+    switch (category) {
+      case 'lifestyle':
+        return lifestyle.includes(item)
+      case 'activities':
+        return activities.includes(item)
+    }
+  }
+
   useEffect(() => {
     let interests = []
     getInterestsData()
       .then((snap) => {
         snap.forEach((doc) => {
-          doc.data().items && interests.push(doc.data().items)
+          doc.data().items && interests.push(doc.data())
         })
       })
       .then(() => {
@@ -121,9 +155,31 @@ const Profile = () => {
                   </Button>
                 </Grid>
                 <Grid item className={classes.spacedChips}>
-                  {interestData.Activities.map((interest, index) => (
-                    <React.Fragment key={index}>
-                      <Chip label={interest} clickable />
+                  {interestData.map((cat, i) => (
+                    <React.Fragment key={i}>
+                      <Typography
+                        variant="h5"
+                        style={{ color: theme.palette[cat.id].main }}
+                      >
+                        {cat.category}
+                      </Typography>
+                      {cat.items.map((item, j) => (
+                        <React.Fragment key={j}>
+                          <Chip
+                            label={item.name}
+                            clickable
+                            variant="outlined"
+                            style={{
+                              margin: '4px',
+                              backgroundColor: checkSelected(cat.id, item.name)
+                                ? theme.palette[cat.id].main
+                                : 'inherit',
+                              borderColor: theme.palette[cat.id].main,
+                            }}
+                            onClick={() => handleClickChip(cat.id, item.name)}
+                          />
+                        </React.Fragment>
+                      ))}
                     </React.Fragment>
                   ))}
                 </Grid>
