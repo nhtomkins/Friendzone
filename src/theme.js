@@ -17,10 +17,19 @@ const theme = createMuiTheme({
       default: '#f0f0f0',
     },
     lifestyle: {
-      main: '#ff7a45',
+      main: '#ff8c3b',
     },
     activities: {
       main: '#a47aff',
+    },
+    movies: {
+      main: '#ffd333',
+    },
+    music: {
+      main: '#61cdff',
+    },
+    sports: {
+      main: '#07e6a0',
     },
   },
   typography: {

@@ -14,8 +14,15 @@ import Box from '@material-ui/core/Box'
 
 import LineupProfile from './LineupProfile'
 
+import LocalBarIcon from '@material-ui/icons/LocalBar'
+import LocalActivityIcon from '@material-ui/icons/LocalActivity'
+import MovieIcon from '@material-ui/icons/Movie'
+import MusicNoteIcon from '@material-ui/icons/MusicNote'
+import FitnessCenterIcon from '@material-ui/icons/FitnessCenter'
+
 const useStyles = makeStyles((theme) => ({
   spacedChips: {
+    backgroundColor: '#FFFFFF',
     '& > *': {
       margin: theme.spacing(0.5),
     },
@@ -23,6 +30,12 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 100,
+  },
+  wrapIcon: {
+    alignItems: 'center',
+    display: 'flex',
+    marginTop: '4px',
+    marginBottom: '25px',
   },
 }))
 
@@ -52,19 +65,21 @@ const Profile = () => {
   const classes = useStyles()
   const theme = useTheme()
   const {
-    currentUser,
+    writeUserData,
     userData,
     updateUserProfileImg,
     loadPercent,
     getInterestsData,
   } = useAuth()
-  const [file, setFile] = useState(null)
   const [error, setError] = useState(null)
   const [interestData, setInterestData] = useState(null)
   const [loading, setLoading] = useState(true)
 
   const [lifestyle, setLifestyle] = useState([])
   const [activities, setActivities] = useState([])
+  const [movies, setMovies] = useState([])
+  const [music, setMusic] = useState([])
+  const [sports, setSports] = useState([])
 
   const allowedFileTypes = ['image/png', 'image/jpeg']
 
@@ -75,7 +90,6 @@ const Profile = () => {
       updateUserProfileImg(selected)
       setError('')
     } else {
-      setFile(null)
       setError('Please select an image file')
     }
   }
@@ -87,7 +101,7 @@ const Profile = () => {
           const newLifestyle = lifestyle.filter((data) => data !== item)
           setLifestyle(newLifestyle)
         } else {
-          setLifestyle((current) => [...current, item])
+          lifestyle.length < 10 && setLifestyle((current) => [...current, item])
         }
         break
       case 'activities':
@@ -95,18 +109,72 @@ const Profile = () => {
           const newActivities = activities.filter((data) => data !== item)
           setActivities(newActivities)
         } else {
-          setActivities((current) => [...current, item])
+          activities.length < 10 &&
+            setActivities((current) => [...current, item])
+        }
+        break
+      case 'movies':
+        if (movies.includes(item)) {
+          const newMovies = movies.filter((data) => data !== item)
+          setMovies(newMovies)
+        } else {
+          movies.length < 10 && setMovies((current) => [...current, item])
+        }
+        break
+      case 'music':
+        if (music.includes(item)) {
+          const newMusic = music.filter((data) => data !== item)
+          setMusic(newMusic)
+        } else {
+          music.length < 10 && setMusic((current) => [...current, item])
+        }
+        break
+      case 'sports':
+        if (sports.includes(item)) {
+          const newSports = sports.filter((data) => data !== item)
+          setSports(newSports)
+        } else {
+          sports.length < 10 && setSports((current) => [...current, item])
         }
         break
     }
   }
 
+  const handleSave = (e) => {
+    setLoading(true)
+
+    writeUserData({ lifestyle, activities, movies, music, sports }).then(() => {
+      setLoading(false)
+    })
+  }
+
   const checkSelected = (category, item) => {
     switch (category) {
       case 'lifestyle':
-        return lifestyle.includes(item)
+        return lifestyle?.includes(item)
       case 'activities':
-        return activities.includes(item)
+        return activities?.includes(item)
+      case 'movies':
+        return movies?.includes(item)
+      case 'music':
+        return music?.includes(item)
+      case 'sports':
+        return sports?.includes(item)
+    }
+  }
+
+  const checkLength = (category) => {
+    switch (category) {
+      case 'lifestyle':
+        return lifestyle?.length
+      case 'activities':
+        return activities?.length
+      case 'movies':
+        return movies?.length
+      case 'music':
+        return music?.length
+      case 'sports':
+        return sports?.length
     }
   }
 
@@ -124,13 +192,21 @@ const Profile = () => {
       })
   }, [])
 
+  useEffect(() => {
+    userData.lifestyle && setLifestyle(userData.lifestyle)
+    userData.activities && setActivities(userData.activities)
+    userData.movies && setMovies(userData.movies)
+    userData.music && setMusic(userData.music)
+    userData.sports && setSports(userData.sports)
+  }, [userData])
+
   return (
     <Box style={{ overflow: 'auto' }}>
       <Container maxWidth="md">
         <Grid
           container
           justify={'flex-start'}
-          spacing={2}
+          spacing={4}
           component={motion.div}
           variants={containerVariants}
           initial="from"
@@ -159,9 +235,56 @@ const Profile = () => {
                     <React.Fragment key={i}>
                       <Typography
                         variant="h5"
-                        style={{ color: theme.palette[cat.id].main }}
+                        align="left"
+                        style={{ margin: '16px 0 8px 0' }}
+                        className={classes.wrapIcon}
                       >
-                        {cat.category}
+                        {cat.id === 'activities' && (
+                          <LocalActivityIcon
+                            fontSize="large"
+                            style={{
+                              color: theme.palette[cat.id].main,
+                              margin: '0px 6px 0px 12px',
+                            }}
+                          />
+                        )}
+                        {cat.id === 'lifestyle' && (
+                          <LocalBarIcon
+                            fontSize="large"
+                            style={{
+                              color: theme.palette[cat.id].main,
+                              margin: '0px 6px 0px 12px',
+                            }}
+                          />
+                        )}
+                        {cat.id === 'movies' && (
+                          <MovieIcon
+                            fontSize="large"
+                            style={{
+                              color: theme.palette[cat.id].main,
+                              margin: '0px 6px 0px 12px',
+                            }}
+                          />
+                        )}
+                        {cat.id === 'music' && (
+                          <MusicNoteIcon
+                            fontSize="large"
+                            style={{
+                              color: theme.palette[cat.id].main,
+                              margin: '0px 6px 0px 12px',
+                            }}
+                          />
+                        )}
+                        {cat.id === 'sports' && (
+                          <FitnessCenterIcon
+                            fontSize="large"
+                            style={{
+                              color: theme.palette[cat.id].main,
+                              margin: '0px 6px 0px 12px',
+                            }}
+                          />
+                        )}
+                        {`${cat.category} ( ${checkLength(cat.id)} / 10 )`}
                       </Typography>
                       {cat.items.map((item, j) => (
                         <React.Fragment key={j}>
@@ -182,6 +305,11 @@ const Profile = () => {
                       ))}
                     </React.Fragment>
                   ))}
+                </Grid>
+                <Grid item>
+                  <Button variant="contained" onClick={handleSave}>
+                    Save Changes
+                  </Button>
                 </Grid>
               </Grid>
             </>

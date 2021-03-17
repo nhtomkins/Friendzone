@@ -19,6 +19,13 @@ import { FormatColorReset } from '@material-ui/icons'
 
 import { interests } from '../data/interestsdata'
 import { Collapse } from '@material-ui/core'
+import ProfileInterests from './ProfileInterests'
+
+import LocalBarIcon from '@material-ui/icons/LocalBar'
+import LocalActivityIcon from '@material-ui/icons/LocalActivity'
+import MovieIcon from '@material-ui/icons/Movie'
+import MusicNoteIcon from '@material-ui/icons/MusicNote'
+import FitnessCenterIcon from '@material-ui/icons/FitnessCenter'
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -163,11 +170,103 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
                 {props.city}
               </Typography>
             </Grid>
-            <Grid item xs>
-              <Typography variant="body1" align="left">
-                Bit shy at first but once you get to know me I won't stop
-                talking!
-              </Typography>
+            <Grid
+              item
+              container
+              xs
+              alignItems="center"
+              alignContent="flex-start"
+            >
+              <Grid item container xs={12} alignItems="stretch">
+                <Grid item>
+                  <LocalActivityIcon
+                    style={{
+                      color: theme.palette['activities'].main,
+                      marginRight: '6px',
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Box
+                    bgcolor="activities.main"
+                    width="100%"
+                    height="80%"
+                    borderRadius="6px"
+                  ></Box>
+                </Grid>
+              </Grid>
+              <Grid item container xs={12} alignItems="stretch">
+                <Grid item>
+                  <LocalBarIcon
+                    style={{
+                      color: theme.palette['lifestyle'].main,
+                      marginRight: '6px',
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <Box
+                    bgcolor="lifestyle.main"
+                    width="100%"
+                    height="80%"
+                    borderRadius="6px"
+                  ></Box>
+                </Grid>
+              </Grid>
+              <Grid item container xs={12} alignItems="stretch">
+                <Grid item>
+                  <MovieIcon
+                    style={{
+                      color: theme.palette['movies'].main,
+                      marginRight: '6px',
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={10}>
+                  <Box
+                    bgcolor="movies.main"
+                    width="100%"
+                    height="80%"
+                    borderRadius="6px"
+                  ></Box>
+                </Grid>
+              </Grid>
+              <Grid item container xs={12} alignItems="stretch">
+                <Grid item>
+                  <MusicNoteIcon
+                    style={{
+                      color: theme.palette['music'].main,
+                      marginRight: '6px',
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Box
+                    bgcolor="music.main"
+                    width="100%"
+                    height="80%"
+                    borderRadius="6px"
+                  ></Box>
+                </Grid>
+              </Grid>
+              <Grid item container xs={12} alignItems="stretch">
+                <Grid item>
+                  <FitnessCenterIcon
+                    style={{
+                      color: theme.palette['sports'].main,
+                      marginRight: '6px',
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={9}>
+                  <Box
+                    bgcolor="sports.main"
+                    width="100%"
+                    height="80%"
+                    borderRadius="6px"
+                  ></Box>
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item container justify="flex-start">
               <Grid item xs={12}>
@@ -192,41 +291,41 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
           </Grid>
 
           <Collapse in={forceMobile || extended}>
-            <Grid container justify="center">
-              <Grid item xs={12} style={{ padding: '24px 24px 24px 24px' }}>
-                <Divider />
-              </Grid>
-              <Grid item sm={7} xs={12} className={classes.interestText}>
-                <Typography variant="h5" style={{ color: '#ff7a45' }}>
-                  Lifestyle
-                </Typography>
-              </Grid>
-              <Grid
-                item
-                sm={5}
-                xs={6}
-                className={mobile ? classes.image : classes.interestImage}
-              >
-                <img
-                  className={classes.imgRight}
-                  src="https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg"
-                />
-              </Grid>
-              <Grid item xs={12} style={{ padding: '24px 24px 24px 24px' }}>
-                {interests.map(
-                  (interest, index) =>
-                    index < 10 && (
-                      <React.Fragment key={index}>
-                        <Chip
-                          label={interest}
-                          variant="outlined"
-                          style={{ margin: '4px', borderColor: '#ff7a45' }}
-                        />
-                      </React.Fragment>
-                    ),
-                )}
-              </Grid>
-            </Grid>
+            {props.activities && (
+              <ProfileInterests
+                interests={props.activities}
+                id="activities"
+                title="Activities"
+              />
+            )}
+            {props.lifestyle && (
+              <ProfileInterests
+                interests={props.lifestyle}
+                id="lifestyle"
+                title="Lifestyle"
+              />
+            )}
+            {props.movies && (
+              <ProfileInterests
+                interests={props.movies}
+                id="movies"
+                title="Movies & TV"
+              />
+            )}
+            {props.music && (
+              <ProfileInterests
+                interests={props.music}
+                id="music"
+                title="Music & Arts"
+              />
+            )}
+            {props.sports && (
+              <ProfileInterests
+                interests={props.sports}
+                id="sports"
+                title="Sports & Fitness"
+              />
+            )}
           </Collapse>
         </Grid>
       </ButtonBase>

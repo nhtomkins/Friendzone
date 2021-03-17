@@ -89,13 +89,10 @@ export const AuthProvider = ({ children }) => {
   */
 
   function writeUserData(userDetails) {
-    firestore
+    return firestore
       .collection('users')
       .doc(`${currentUser.uid}`)
       .update(userDetails)
-      .then((result) => {
-        return result
-      })
       .catch((err) => console.error(err))
   }
 
