@@ -11,6 +11,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import { interests } from '../data/interestsdata'
 import Container from '@material-ui/core/Container'
 import Box from '@material-ui/core/Box'
+import Grow from '@material-ui/core/Grow'
 
 import LineupProfile from './LineupProfile'
 
@@ -23,6 +24,7 @@ import FitnessCenterIcon from '@material-ui/icons/FitnessCenter'
 const useStyles = makeStyles((theme) => ({
   spacedChips: {
     backgroundColor: '#FFFFFF',
+    borderRadius: 12,
     '& > *': {
       margin: theme.spacing(0.5),
     },
@@ -33,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
   wrapIcon: {
     alignItems: 'center',
+    justifyContent: 'center',
     display: 'flex',
     marginTop: '4px',
     marginBottom: '25px',
@@ -54,6 +57,26 @@ const containerVariants = {
   },
   exit: {
     x: '50vw',
+    opacity: 0,
+    transition: {
+      duration: 0.15,
+    },
+  },
+}
+
+const subinterestVariants = {
+  from: {
+    opacity: 0,
+  },
+  to: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.15,
+      delay: 0.15,
+    },
+  },
+  exit: {
     opacity: 0,
     transition: {
       duration: 0.15,
@@ -201,8 +224,14 @@ const Profile = () => {
   }, [userData])
 
   return (
-    <Box style={{ overflow: 'auto' }}>
-      <Container maxWidth="md">
+    <Box
+      style={{
+        overflow: 'auto',
+        padding: '24px 8px 24px 8px',
+        overflowX: 'hidden',
+      }}
+    >
+      <Container maxWidth="md" disableGutters>
         <Grid
           container
           justify={'flex-start'}
@@ -212,7 +241,6 @@ const Profile = () => {
           initial="from"
           animate="to"
           exit="exit"
-          style={{ padding: '24px 8px 24px 8px' }}
         >
           {!loading && (
             <>
@@ -230,80 +258,157 @@ const Profile = () => {
                     />
                   </Button>
                 </Grid>
-                <Grid item className={classes.spacedChips}>
+                <Grid item container className={classes.spacedChips}>
                   {interestData.map((cat, i) => (
-                    <React.Fragment key={i}>
-                      <Typography
-                        variant="h5"
-                        align="left"
-                        style={{ margin: '16px 0 8px 0' }}
-                        className={classes.wrapIcon}
+                    <Grid item container key={i} justify="center">
+                      <Grid item xs={12}>
+                        <Typography
+                          variant="h5"
+                          align="center"
+                          style={{ margin: '16px 0 8px 0' }}
+                          className={classes.wrapIcon}
+                        >
+                          {cat.id === 'activities' && (
+                            <LocalActivityIcon
+                              fontSize="large"
+                              style={{
+                                color: theme.palette[cat.id].main,
+                                margin: '0px 6px 0px 12px',
+                              }}
+                            />
+                          )}
+                          {cat.id === 'lifestyle' && (
+                            <LocalBarIcon
+                              fontSize="large"
+                              style={{
+                                color: theme.palette[cat.id].main,
+                                margin: '0px 6px 0px 12px',
+                              }}
+                            />
+                          )}
+                          {cat.id === 'movies' && (
+                            <MovieIcon
+                              fontSize="large"
+                              style={{
+                                color: theme.palette[cat.id].main,
+                                margin: '0px 6px 0px 12px',
+                              }}
+                            />
+                          )}
+                          {cat.id === 'music' && (
+                            <MusicNoteIcon
+                              fontSize="large"
+                              style={{
+                                color: theme.palette[cat.id].main,
+                                margin: '0px 6px 0px 12px',
+                              }}
+                            />
+                          )}
+                          {cat.id === 'sports' && (
+                            <FitnessCenterIcon
+                              fontSize="large"
+                              style={{
+                                color: theme.palette[cat.id].main,
+                                margin: '0px 6px 0px 12px',
+                              }}
+                            />
+                          )}
+                          {`${cat.category} ( ${checkLength(cat.id)} / 10 )`}
+                        </Typography>
+                      </Grid>
+                      <Grid
+                        item
+                        container
+                        justify="center"
+                        xs={12}
+                        style={{ padding: '0px 12px 0px 12px' }}
                       >
-                        {cat.id === 'activities' && (
-                          <LocalActivityIcon
-                            fontSize="large"
-                            style={{
-                              color: theme.palette[cat.id].main,
-                              margin: '0px 6px 0px 12px',
-                            }}
-                          />
-                        )}
-                        {cat.id === 'lifestyle' && (
-                          <LocalBarIcon
-                            fontSize="large"
-                            style={{
-                              color: theme.palette[cat.id].main,
-                              margin: '0px 6px 0px 12px',
-                            }}
-                          />
-                        )}
-                        {cat.id === 'movies' && (
-                          <MovieIcon
-                            fontSize="large"
-                            style={{
-                              color: theme.palette[cat.id].main,
-                              margin: '0px 6px 0px 12px',
-                            }}
-                          />
-                        )}
-                        {cat.id === 'music' && (
-                          <MusicNoteIcon
-                            fontSize="large"
-                            style={{
-                              color: theme.palette[cat.id].main,
-                              margin: '0px 6px 0px 12px',
-                            }}
-                          />
-                        )}
-                        {cat.id === 'sports' && (
-                          <FitnessCenterIcon
-                            fontSize="large"
-                            style={{
-                              color: theme.palette[cat.id].main,
-                              margin: '0px 6px 0px 12px',
-                            }}
-                          />
-                        )}
-                        {`${cat.category} ( ${checkLength(cat.id)} / 10 )`}
-                      </Typography>
-                      {cat.items.map((item, j) => (
-                        <React.Fragment key={j}>
-                          <Chip
-                            label={item.name}
-                            clickable
-                            variant="outlined"
-                            style={{
-                              margin: '4px',
-                              backgroundColor: checkSelected(cat.id, item.name)
-                                ? theme.palette[cat.id].main
-                                : 'inherit',
-                              borderColor: theme.palette[cat.id].main,
-                            }}
-                            onClick={() => handleClickChip(cat.id, item.name)}
-                          />
-                        </React.Fragment>
-                      ))}
-                    </React.Fragment>
+                        {cat.items.map((item, j) => (
+                          <>
+                            {item.sub && checkSelected(cat.id, item.name) ? (
+                              <Grid
+                                item
+                                key={j}
+                                style={{
+                                  borderLeft: `3px solid ${
+                                    theme.palette[cat.id].main
+                                  }`,
+                                  borderTopRightRadius: '12px',
+                                  borderBottomRightRadius: '12px',
+                                  boxShadow: '0 0 20px 0 rgba(0,0,0,0.12)',
+                                  margin: '8px 4px 8px 4px',
+                                  padding: '4px 8px 4px 8px',
+                                }}
+                                component={motion.div}
+                                variants={subinterestVariants}
+                                initial="from"
+                                animate="to"
+                                exit="exit"
+                              >
+                                <Chip
+                                  label={item.name}
+                                  clickable
+                                  variant="outlined"
+                                  style={{
+                                    margin: '4px',
+                                    backgroundColor: checkSelected(
+                                      cat.id,
+                                      item.name,
+                                    )
+                                      ? theme.palette[cat.id].main
+                                      : 'inherit',
+                                    borderColor: theme.palette[cat.id].main,
+                                  }}
+                                  onClick={() =>
+                                    handleClickChip(cat.id, item.name)
+                                  }
+                                />
+                                {item.sub.map((subitem, k) => (
+                                  <React.Fragment key={k}>
+                                    <Chip
+                                      label={subitem}
+                                      clickable
+                                      variant="outlined"
+                                      style={{
+                                        margin: '4px',
+                                        backgroundColor: checkSelected(
+                                          cat.id,
+                                          subitem,
+                                        )
+                                          ? theme.palette[cat.id].main
+                                          : 'inherit',
+                                        borderColor: theme.palette[cat.id].main,
+                                      }}
+                                    />
+                                  </React.Fragment>
+                                ))}
+                              </Grid>
+                            ) : (
+                              <Grid item key={j}>
+                                <Chip
+                                  label={item.name}
+                                  clickable
+                                  variant="outlined"
+                                  style={{
+                                    margin: '4px',
+                                    backgroundColor: checkSelected(
+                                      cat.id,
+                                      item.name,
+                                    )
+                                      ? theme.palette[cat.id].main
+                                      : 'inherit',
+                                    borderColor: theme.palette[cat.id].main,
+                                  }}
+                                  onClick={() =>
+                                    handleClickChip(cat.id, item.name)
+                                  }
+                                />
+                              </Grid>
+                            )}
+                          </>
+                        ))}
+                      </Grid>
+                    </Grid>
                   ))}
                 </Grid>
                 <Grid item>

@@ -1,19 +1,19 @@
 import React, { useRef, useState } from 'react'
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Alert from '@material-ui/lab/Alert';
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
+import Link from '@material-ui/core/Link'
+import Grid from '@material-ui/core/Grid'
+import Box from '@material-ui/core/Box'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
+import Container from '@material-ui/core/Container'
+import Alert from '@material-ui/lab/Alert'
 
-import { Link as RouterLink, useHistory } from "react-router-dom";
+import { Link as RouterLink, useHistory } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -34,14 +34,14 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
+}))
 
 const Signin = () => {
-  const classes = useStyles();
+  const classes = useStyles()
   const emailRef = useRef()
   const passwordRef = useRef()
   const { login } = useAuth()
-  const [error, setError] = useState("")
+  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const history = useHistory()
 
@@ -49,15 +49,14 @@ const Signin = () => {
     e.preventDefault()
 
     try {
-      setError("")
+      setError('')
       setLoading(true)
       await login(emailRef.current.value, passwordRef.current.value)
-      history.push("/lineup")
+      history.push('/lineup')
     } catch {
-      setError("Failed to sign in")
+      setError('Failed to sign in')
+      setLoading(false)
     }
-
-    setLoading(false)
   }
 
   return (
@@ -124,7 +123,7 @@ const Signin = () => {
         </form>
       </div>
     </Container>
-  );
+  )
 }
 
 export default Signin

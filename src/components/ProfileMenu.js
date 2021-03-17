@@ -1,20 +1,20 @@
 import React, { useState } from 'react'
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles } from "@material-ui/core/styles";
-import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import { makeStyles } from '@material-ui/core/styles'
+import Avatar from '@material-ui/core/Avatar'
 
 import { useAuth } from '../contexts/AuthContext'
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   logo: {
     width: 70,
-    height: 40
+    height: 40,
   },
   profile: {
     width: theme.spacing(5),
@@ -22,44 +22,43 @@ const useStyles = makeStyles((theme) => ({
     border: '1px solid',
     borderColor: '#FFFFFF',
     '&:hover': {
-      borderColor: theme.palette.secondary.main
+      borderColor: theme.palette.secondary.main,
     },
-  }
-}));
+  },
+}))
 
 const ProfileMenu = () => {
-  const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [error, setError ] = useState('')
+  const classes = useStyles()
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [error, setError] = useState('')
   const { userData, logout } = useAuth()
   const history = useHistory()
 
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   async function handleLogout() {
     setError('')
 
     try {
       await logout()
+      setAnchorEl(null)
       history.push('/')
     } catch {
       setError('Failed to log out')
     }
-
-    setAnchorEl(null);
   }
 
   return (
     <div>
-      <Avatar 
-        className={classes.profile} 
-        onClick={handleClick} 
+      <Avatar
+        className={classes.profile}
+        onClick={handleClick}
         alt={userData.firstname}
         src={userData.profileImgUrl}
       />
@@ -70,12 +69,14 @@ const ProfileMenu = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} component={Link} to="/profile">Profile</MenuItem>
+        <MenuItem onClick={handleClose} component={Link} to="/profile">
+          Profile
+        </MenuItem>
         <MenuItem onClick={handleClose}>Settings</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </div>
-  );
+  )
 }
 
 export default ProfileMenu
