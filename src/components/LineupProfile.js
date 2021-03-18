@@ -296,6 +296,7 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
                 interests={props.activities}
                 id="activities"
                 title="Activities"
+                imgUrl={props.activitiesImgUrl}
               />
             )}
             {props.lifestyle && (
@@ -303,6 +304,7 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
                 interests={props.lifestyle}
                 id="lifestyle"
                 title="Lifestyle"
+                imgUrl={props.lifestyleImgUrl}
               />
             )}
             {props.movies && (
@@ -310,6 +312,7 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
                 interests={props.movies}
                 id="movies"
                 title="Movies & TV"
+                imgUrl={props.moviesImgUrl}
               />
             )}
             {props.music && (
@@ -317,6 +320,7 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
                 interests={props.music}
                 id="music"
                 title="Music & Arts"
+                imgUrl={props.musicImgUrl}
               />
             )}
             {props.sports && (
@@ -324,6 +328,7 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
                 interests={props.sports}
                 id="sports"
                 title="Sports & Fitness"
+                imgUrl={props.sportsImgUrl}
               />
             )}
           </Collapse>

@@ -24,6 +24,7 @@ import FitnessCenterIcon from '@material-ui/icons/FitnessCenter'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ImageIcon from '@material-ui/icons/Image'
 import PersonIcon from '@material-ui/icons/Person'
+import ImageUploadButton from './ImageUploadButton'
 
 const useStyles = makeStyles((theme) => ({
   spacedChips: {
@@ -79,28 +80,20 @@ const subinterestVariants = {
 const ProfileImages = (props) => {
   const classes = useStyles()
   const theme = useTheme()
-  const {
-    writeUserData,
-    userData,
-    updateUserProfileImg,
-    loadPercent,
-    getInterestsData,
-  } = useAuth()
+  const { userData } = useAuth()
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
   const [extended, setExtended] = useState(false)
 
-  const allowedFileTypes = ['image/png', 'image/jpeg']
-
-  const uploadHandler = (e) => {
-    let selected = e.target.files[0]
-
-    if (selected && allowedFileTypes.includes(selected.type)) {
-      updateUserProfileImg(selected)
-      setError('')
-    } else {
-      setError('Please select an image file')
-    }
+  const countImages = () => {
+    let count = 0
+    userData.profileImgUrl && count++
+    userData.activitiesImgUrl && count++
+    userData.lifestyleImgUrl && count++
+    userData.moviesImgUrl && count++
+    userData.musicImgUrl && count++
+    userData.sportsImgUrl && count++
+    return count
   }
 
   return (
@@ -131,7 +124,7 @@ const ProfileImages = (props) => {
                 margin: '-2px 12px 0px 12px',
               }}
             />
-            {`Images ( 1 / 6 )`}
+            {`Images ( ${countImages()} / 6 )`}
           </Typography>
         </Grid>
         <Grid item xs={1}>
@@ -140,91 +133,83 @@ const ProfileImages = (props) => {
       </Grid>
 
       <Collapse in={extended}>
-        <Grid item container alignItems="center" xs={12}>
-          <ButtonBase
-            style={{
-              margin: '12px 12px 12px 12px',
-              boxShadow: '0 4px 20px 0 rgba(0,0,0,0.12)',
-              width: '100%',
-              borderRadius: 12,
-            }}
-            component={motion.div}
-            whileHover={{
-              y: '-2px',
-              boxShadow: '0 4px 20px 0 rgba(0,0,0,0.2)',
-            }}
-            transition={{ duration: 0.1 }}
-          >
-            <Grid item>
-              <img
-                src="https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg"
-                className={classes.image}
-              />
-            </Grid>
-            <Grid item xs>
-              <Typography variant="h6" className={classes.wrapIcon}>
-                <PersonIcon
-                  style={{
-                    //color: theme.palette.activities.main,
-                    margin: '-2px 12px 0px 12px',
-                  }}
-                />
-                Profile Image
-              </Typography>
-            </Grid>
-            <Input
-              type="file"
-              style={{ display: 'none' }}
-              onChange={uploadHandler}
+        <ImageUploadButton
+          title={'Profile Image'}
+          icon={
+            <PersonIcon
+              style={{
+                margin: '-2px 12px 0px 12px',
+              }}
             />
-          </ButtonBase>
-        </Grid>
-
-        <Grid item xs={12}>
-          <LocalActivityIcon
-            fontSize="large"
-            style={{
-              color: theme.palette.activities.main,
-              margin: '2px 12px 0px 12px',
-            }}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <LocalBarIcon
-            fontSize="large"
-            style={{
-              color: theme.palette.lifestyle.main,
-              margin: '2px 12px 0px 12px',
-            }}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <MovieIcon
-            fontSize="large"
-            style={{
-              color: theme.palette.movies.main,
-              margin: '2px 12px 0px 12px',
-            }}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <MusicNoteIcon
-            fontSize="large"
-            style={{
-              color: theme.palette.music.main,
-              margin: '2px 12px 0px 12px',
-            }}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <FitnessCenterIcon
-            fontSize="large"
-            style={{
-              color: theme.palette.sports.main,
-              margin: '2px 12px 0px 12px',
-            }}
-          />
-        </Grid>
+          }
+          image={userData.profileImgUrl}
+          id="profile"
+        />
+        <ImageUploadButton
+          title={'Activities Image'}
+          icon={
+            <LocalActivityIcon
+              style={{
+                color: theme.palette.activities.main,
+                margin: '2px 12px 0px 12px',
+              }}
+            />
+          }
+          image={userData.activitiesImgUrl}
+          id="activities"
+        />
+        <ImageUploadButton
+          title={'Lifestyle Image'}
+          icon={
+            <LocalBarIcon
+              style={{
+                color: theme.palette.lifestyle.main,
+                margin: '2px 12px 0px 12px',
+              }}
+            />
+          }
+          image={userData.lifestyleImgUrl}
+          id="lifestyle"
+        />
+        <ImageUploadButton
+          title={'Movies & TV Image'}
+          icon={
+            <MovieIcon
+              style={{
+                color: theme.palette.movies.main,
+                margin: '2px 12px 0px 12px',
+              }}
+            />
+          }
+          image={userData.moviesImgUrl}
+          id="movies"
+        />
+        <ImageUploadButton
+          title={'Music & Arts Image'}
+          icon={
+            <MusicNoteIcon
+              style={{
+                color: theme.palette.music.main,
+                margin: '2px 12px 0px 12px',
+              }}
+            />
+          }
+          image={userData.musicImgUrl}
+          id="music"
+        />
+        <ImageUploadButton
+          title={'Sports & Fitness Image'}
+          icon={
+            <FitnessCenterIcon
+              style={{
+                color: theme.palette.sports.main,
+                margin: '2px 12px 0px 12px',
+              }}
+            />
+          }
+          image={userData.sportsImgUrl}
+          id="sports"
+        />
       </Collapse>
     </motion.div>
   )

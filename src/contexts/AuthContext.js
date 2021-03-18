@@ -114,10 +114,10 @@ export const AuthProvider = ({ children }) => {
       .catch((err) => console.error(err))
   }
 
-  function updateUserProfileImg(file) {
+  function updateUserImage(file, id) {
     const imageExtension = file.name.split('.')[file.name.split('.').length - 1]
     const storageRef = storage.ref(
-      `userProfiles/${currentUser.uid}-1.${imageExtension}`,
+      `userImages/${currentUser.uid}/${id}.${imageExtension}`,
     )
 
     storageRef.put(file).on(
@@ -132,7 +132,7 @@ export const AuthProvider = ({ children }) => {
       },
       async () => {
         const url = await storageRef.getDownloadURL()
-        writeUserData({ profileImgUrl: url })
+        writeUserData({ [`${id}ImgUrl`]: url })
       },
     )
   }
@@ -357,7 +357,7 @@ export const AuthProvider = ({ children }) => {
     messages,
     messagesLoading,
     writeUserData,
-    updateUserProfileImg,
+    updateUserImage,
     signup,
     login,
     logout,

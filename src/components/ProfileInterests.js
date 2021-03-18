@@ -139,17 +139,16 @@ const ProfileInterests = (props) => {
           </Typography>
         </Grid>
       </Grid>
-      <Grid
-        item
-        sm={5}
-        xs={6}
-        className={mobile ? classes.image : classes.interestImage}
-      >
-        <img
-          className={classes.imgRight}
-          src="https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg"
-        />
-      </Grid>
+      {props.imgUrl && (
+        <Grid
+          item
+          sm={5}
+          xs={6}
+          className={mobile ? classes.image : classes.interestImage}
+        >
+          <img className={classes.imgRight} src={props.imgUrl} />
+        </Grid>
+      )}
       <Grid item xs={12} style={{ padding: '12px 12px 12px 12px' }}>
         {props.interests.map((interest, index) => (
           <React.Fragment key={index}>
