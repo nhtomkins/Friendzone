@@ -107,7 +107,7 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
     >
       <ButtonBase
         disableTouchRipple
-        onClick={() => !forceMobile && setExtended((value) => !value)}
+        onClick={() => setExtended((value) => !value)}
       >
         <Grid container justify="center">
           <Grid
@@ -290,7 +290,7 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
             </Grid>
           </Grid>
 
-          <Collapse in={forceMobile || extended}>
+          <Collapse in={extended}>
             {props.activities && (
               <ProfileInterests
                 interests={props.activities}

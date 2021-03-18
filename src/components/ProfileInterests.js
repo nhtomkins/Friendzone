@@ -151,21 +151,18 @@ const ProfileInterests = (props) => {
         />
       </Grid>
       <Grid item xs={12} style={{ padding: '12px 12px 12px 12px' }}>
-        {props.interests.map(
-          (interest, index) =>
-            index < 10 && (
-              <React.Fragment key={index}>
-                <Chip
-                  label={interest}
-                  variant="outlined"
-                  style={{
-                    margin: '4px',
-                    borderColor: theme.palette[props.id].main,
-                  }}
-                />
-              </React.Fragment>
-            ),
-        )}
+        {props.interests.map((interest, index) => (
+          <React.Fragment key={index}>
+            <Chip
+              label={interest}
+              variant="outlined"
+              style={{
+                margin: '4px',
+                borderColor: theme.palette[props.id].main,
+              }}
+            />
+          </React.Fragment>
+        ))}
       </Grid>
     </Grid>
   )
