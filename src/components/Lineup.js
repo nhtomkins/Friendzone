@@ -157,21 +157,21 @@ const Lineup = () => {
               <Chip
                 label="Men"
                 icon={<PeopleIcon />}
-                color={menFilter ? 'secondary' : 'default'}
+                color={menFilter ? 'primary' : 'default'}
                 clickable
                 onClick={() => onMenFilter((value) => !value)}
               />
               <Chip
                 label="Women"
                 icon={<PeopleIcon />}
-                color={womenFilter ? 'secondary' : 'default'}
+                color={womenFilter ? 'primary' : 'default'}
                 clickable
                 onClick={() => onWomenFilter((value) => !value)}
               />
               <Chip
                 label="Other"
                 icon={<PeopleIcon />}
-                color={otherFilter ? 'secondary' : 'default'}
+                color={otherFilter ? 'primary' : 'default'}
                 clickable
                 onClick={() => onOtherFilter((value) => !value)}
               />

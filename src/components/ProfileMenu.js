@@ -19,10 +19,10 @@ const useStyles = makeStyles((theme) => ({
   profile: {
     width: theme.spacing(5),
     height: theme.spacing(5),
-    border: '1px solid',
+    border: '2px solid',
     borderColor: '#FFFFFF',
     '&:hover': {
-      borderColor: theme.palette.secondary.main,
+      borderColor: theme.palette.primary.main,
     },
   },
 }))

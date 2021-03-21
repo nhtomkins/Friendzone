@@ -142,7 +142,7 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
             alignItems="stretch"
           >
             <Grid item style={{ paddingTop: '16px' }}>
-              <Typography variant="subtitle2" align="center" color="primary">
+              <Typography variant="subtitle2" align="center" color="secondary">
                 {props.likedUsers?.includes(userData.userId)
                   ? userData.likedUsers?.includes(props.userId)
                     ? 'You are friends'
