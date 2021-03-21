@@ -49,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
   },
   page: {
     height: '100vh',
+    background: 'rgb(103,58,183)',
+    background:
+      'linear-gradient(90deg, rgba(103,58,183,1) 0%, rgba(255,167,38,1) 100%)',
   },
 }))
 
