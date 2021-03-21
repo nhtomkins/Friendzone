@@ -46,12 +46,16 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#fff',
     maxWidth: '600px',
     boxShadow: '0 0 20px 0 rgba(0,0,0,0.12)',
+    margin: '10px',
   },
   page: {
-    height: '100vh',
+    height: '100%',
     background: 'rgb(103,58,183)',
     background:
       'linear-gradient(90deg, rgba(103,58,183,1) 0%, rgba(255,167,38,1) 100%)',
+  },
+  homePage: {
+    height: '100%',
   },
 }))
 
@@ -102,40 +106,49 @@ const NoUserHome = () => {
               where friendships take off
             </Typography>
           </Grid>
-          <Grid item xs={12} style={{ marginBottom: '40px' }}>
+          <Grid
+            item
+            xs={12}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+              marginBottom: '40px',
+            }}
+          >
             <LocalActivityIcon
               style={{
                 color: theme.palette.activities.main,
                 fontSize: 60,
-                margin: '0 12px',
+                margin: '6px 12px',
               }}
             />
             <LocalBarIcon
               style={{
                 color: theme.palette.lifestyle.main,
                 fontSize: 60,
-                margin: '0 12px',
+                margin: '6px 12px',
               }}
             />
             <MovieIcon
               style={{
                 color: theme.palette.movies.main,
                 fontSize: 60,
-                margin: '0 12px',
+                margin: '6px 12px',
               }}
             />
             <MusicNoteIcon
               style={{
                 color: theme.palette.music.main,
                 fontSize: 60,
-                margin: '0 12px',
+                margin: '6px 12px',
               }}
             />
             <FitnessCenterIcon
               style={{
                 color: theme.palette.sports.main,
                 fontSize: 60,
-                margin: '0 12px',
+                margin: '6px 12px',
               }}
             />
           </Grid>

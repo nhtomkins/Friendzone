@@ -42,7 +42,7 @@ const Header = (props) => {
 
   return (
     <nav className={classes.root}>
-      <AppBar color="default">
+      <AppBar color="default" position="sticky">
         <Toolbar variant="dense">
           <Grid justify={'space-between'} container alignItems={'center'}>
             <Grid xs={1} item>
@@ -78,7 +78,6 @@ const Header = (props) => {
           </Grid>
         </Toolbar>
       </AppBar>
-      <Toolbar variant="dense" />
     </nav>
   )
 }
