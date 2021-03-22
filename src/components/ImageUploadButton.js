@@ -116,7 +116,7 @@ const ImageUploadButton = (props) => {
               src={
                 props.image
                   ? props.image
-                  : 'https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg'
+                  : 'https://firebasestorage.googleapis.com/v0/b/friendzone-dev-1c6af.appspot.com/o/no-user.png?alt=media&token=65fd3718-6cb9-4294-ad33-36ee7edf7e4c'
               }
               className={classes.image}
             />

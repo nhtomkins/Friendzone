@@ -63,7 +63,7 @@ const ProfileMenu = () => {
         src={userData.profileImgUrl}
       />
       <Menu
-        id="simple-menu"
+        id="profile-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}

@@ -39,7 +39,6 @@ const theme = createMuiTheme({
   typography: {
     h1: {
       fontSize: 72,
-      color: '#6000DA',
       fontWeight: 450,
     },
     h5: {

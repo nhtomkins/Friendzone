@@ -149,9 +149,15 @@ const ProfileInterests = (props) => {
           <img className={classes.imgRight} src={props.imgUrl} />
         </Grid>
       )}
-      <Grid item xs={12} style={{ padding: '12px 12px 12px 12px' }}>
+      <Grid
+        item
+        container
+        xs={12}
+        justify="center"
+        style={{ padding: '12px 12px 12px 12px' }}
+      >
         {props.interests.map((interest, index) => (
-          <React.Fragment key={index}>
+          <Grid item key={index}>
             <Chip
               label={interest}
               variant="outlined"
@@ -160,7 +166,7 @@ const ProfileInterests = (props) => {
                 borderColor: theme.palette[props.id].main,
               }}
             />
-          </React.Fragment>
+          </Grid>
         ))}
       </Grid>
     </Grid>

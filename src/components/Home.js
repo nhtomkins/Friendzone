@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     marginTop: '60px',
     marginBottom: '16px',
+    color: theme.palette.primary.main,
   },
   subtitle: {
     marginBottom: '40px',
@@ -45,17 +46,28 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 12,
     backgroundColor: '#fff',
     maxWidth: '600px',
-    boxShadow: '0 0 20px 0 rgba(0,0,0,0.12)',
+    boxShadow: '0 0 20px 0 rgba(0,0,0,0.2)',
     margin: '10px',
   },
   page: {
     height: '100%',
+    overflow: 'auto',
     background: 'rgb(103,58,183)',
     background:
       'linear-gradient(90deg, rgba(103,58,183,1) 0%, rgba(255,167,38,1) 100%)',
   },
   homePage: {
     height: '100%',
+  },
+  icon: {
+    fontSize: 60,
+    margin: '6px 12px',
+  },
+  iconRow: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    marginBottom: '40px',
   },
 }))
 
@@ -106,49 +118,35 @@ const NoUserHome = () => {
               where friendships take off
             </Typography>
           </Grid>
-          <Grid
-            item
-            xs={12}
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              flexWrap: 'wrap',
-              marginBottom: '40px',
-            }}
-          >
+          <Grid item xs={12} className={classes.iconRow}>
             <LocalActivityIcon
+              className={classes.icon}
               style={{
                 color: theme.palette.activities.main,
-                fontSize: 60,
-                margin: '6px 12px',
               }}
             />
             <LocalBarIcon
+              className={classes.icon}
               style={{
                 color: theme.palette.lifestyle.main,
-                fontSize: 60,
-                margin: '6px 12px',
               }}
             />
             <MovieIcon
+              className={classes.icon}
               style={{
                 color: theme.palette.movies.main,
-                fontSize: 60,
-                margin: '6px 12px',
               }}
             />
             <MusicNoteIcon
+              className={classes.icon}
               style={{
                 color: theme.palette.music.main,
-                fontSize: 60,
-                margin: '6px 12px',
               }}
             />
             <FitnessCenterIcon
+              className={classes.icon}
               style={{
                 color: theme.palette.sports.main,
-                fontSize: 60,
-                margin: '6px 12px',
               }}
             />
           </Grid>

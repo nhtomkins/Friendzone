@@ -1,43 +1,38 @@
 import React, { useRef, useState } from 'react'
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Alert from '@material-ui/lab/Alert';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import MenuItem from '@material-ui/core/MenuItem';
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
+import Link from '@material-ui/core/Link'
+import Grid from '@material-ui/core/Grid'
+import Box from '@material-ui/core/Box'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
+import Container from '@material-ui/core/Container'
+import Alert from '@material-ui/lab/Alert'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import FormControl from '@material-ui/core/FormControl'
+import FormLabel from '@material-ui/core/FormLabel'
+import MenuItem from '@material-ui/core/MenuItem'
 
-import { Link as RouterLink, useHistory } from "react-router-dom";
+import { Link as RouterLink, useHistory } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
-import { KeyboardDatePicker } from '@material-ui/pickers';
+import { KeyboardDatePicker } from '@material-ui/pickers'
+import getLocaleDateString from '../helpers/getLocaleDateString'
 
-const cities = [
-  "Brisbane",
-  "Melbourne",
-  "Perth",
-  "Sydney"
-]
+const cities = ['Brisbane', 'Melbourne', 'Perth', 'Sydney']
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(4),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    overflow: 'auto'
-    
   },
   avatar: {
     margin: theme.spacing(1),
@@ -50,11 +45,10 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
-
+}))
 
 const Signup = () => {
-  const classes = useStyles();
+  const classes = useStyles()
   const emailRef = useRef()
   const passwordRef = useRef()
   const confirmPasswordRef = useRef()
@@ -66,17 +60,17 @@ const Signup = () => {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedGender, setSelectedGender] = useState('female');
+  const [selectedDate, setSelectedDate] = useState(new Date())
+  const [selectedGender, setSelectedGender] = useState('female')
   const [selectedCity, setSelectedCity] = useState('')
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
+    setSelectedDate(date)
+  }
 
   const handleGenderChange = (event) => {
-    setSelectedGender(event.target.value);
-  };
+    setSelectedGender(event.target.value)
+  }
 
   const handleCityChange = (event) => {
     setSelectedCity(event.target.value)
@@ -84,7 +78,7 @@ const Signup = () => {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    
+
     if (passwordRef.current.value !== confirmPasswordRef.current.value) {
       return setError('Passwords do not match')
     }
@@ -97,9 +91,9 @@ const Signup = () => {
         lastname: lastNameRef.current.value,
         birthday: selectedDate,
         gender: selectedGender,
-        city: selectedCity
+        city: selectedCity,
       })
-      history.push("/lineup")
+      history.push('/lineup')
     } catch {
       setError('Failed to create an account')
     }
@@ -108,7 +102,7 @@ const Signup = () => {
   }
 
   return (
-    <Container maxWidth="xs" >
+    <Container maxWidth="xs">
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -147,17 +141,34 @@ const Signup = () => {
             <Grid item xs={12}>
               <FormControl component="fieldset">
                 <FormLabel component="legend">Gender</FormLabel>
-                  <RadioGroup aria-label="gender" name="gender1" value={selectedGender} onChange={handleGenderChange}>
-                    <FormControlLabel value="female" control={<Radio />} label="Female" />
-                    <FormControlLabel value="male" control={<Radio />} label="Male" />
-                    <FormControlLabel value="other" control={<Radio />} label="Other" />
-                  </RadioGroup>
+                <RadioGroup
+                  aria-label="gender"
+                  name="gender1"
+                  value={selectedGender}
+                  onChange={handleGenderChange}
+                >
+                  <FormControlLabel
+                    value="female"
+                    control={<Radio />}
+                    label="Female"
+                  />
+                  <FormControlLabel
+                    value="male"
+                    control={<Radio />}
+                    label="Male"
+                  />
+                  <FormControlLabel
+                    value="other"
+                    control={<Radio />}
+                    label="Other"
+                  />
+                </RadioGroup>
               </FormControl>
             </Grid>
             <Grid item xs={12}>
               <KeyboardDatePicker
                 variant="inline"
-                format="yyyy/MM/dd"
+                format={getLocaleDateString()}
                 id="birthday"
                 label="Birthday"
                 value={selectedDate}
