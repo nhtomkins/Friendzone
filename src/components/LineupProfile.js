@@ -11,7 +11,7 @@ import Chip from '@material-ui/core/Chip'
 import PlaceIcon from '@material-ui/icons/Place'
 import ThumbUpIcon from '@material-ui/icons/ThumbUp'
 
-import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion'
+import { motion, useAnimation } from 'framer-motion'
 import { useAuth } from '../contexts/AuthContext'
 
 import useMediaQuery from '@material-ui/core/useMediaQuery'
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     maxWidth: '600px',
-    background: '#ffffff',
+    backgroundColor: '#ffffff',
     boxShadow: '0 0 20px 0 rgba(0,0,0,0.12)',
     borderRadius: 12,
     position: 'relative',
@@ -94,22 +94,50 @@ const useStyles = makeStyles((theme) => ({
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
   },
+  overlay: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,0)',
+    zIndex: 5,
+    pointerEvents: 'none',
+  },
 }))
 
 const LineupProfile = ({ forceMobile = false, ...props }) => {
   const classes = useStyles()
   const theme = useTheme()
   const mobile = useMediaQuery(theme.breakpoints.only('xs'))
-  const { likeUser, userData } = useAuth()
+  const controls = useAnimation()
+  const { likeUser, unlikeUser, userData } = useAuth()
   const [extended, setExtended] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
 
   const handleLike = (e) => {
     setExtended(false)
+    controls.start({
+      background: [
+        theme.palette.secondary.light,
+        theme.palette.secondary.light,
+        'rgba(0,0,0,0)',
+      ],
+      x: ['100%', '0%', '0%'],
+      y: ['100%', '0%', '0%'],
+      borderRadius: ['50px', '12px', '0'],
+      opacity: [1, 0.7, 0],
+      transition: { duration: 1 },
+    })
     likeUser(props)
   }
 
-  const handleUnlike = (e) => {}
+  const handleUnlike = (e) => {
+    handleClose()
+    unlikeUser(props)
+  }
 
   const handleMenu = (e) => {
     setAnchorEl(e.currentTarget)
@@ -120,11 +148,7 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
   }
 
   return (
-    <motion.div
-      className={classes.card}
-      //whileHover={{ y: '-4px', boxShadow: '0 4px 20px 0 rgba(0,0,0,0.2)' }}
-      //transition={{ duration: 0.2 }}
-    >
+    <motion.div className={classes.card}>
       <Grid container>
         <Grid
           className={classes.image}
@@ -303,7 +327,7 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
               <Menu
                 id="option-menu"
                 anchorEl={anchorEl}
-                //keepMounted
+                keepMounted
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
@@ -416,6 +440,7 @@ const LineupProfile = ({ forceMobile = false, ...props }) => {
           </>
         )}
       </Grid>
+      <motion.div className={classes.overlay} animate={controls} />
     </motion.div>
   )
 }

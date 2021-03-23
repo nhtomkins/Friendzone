@@ -3,6 +3,8 @@ import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import { motion, AnimatePresence } from 'framer-motion'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 import { Switch, Route, useLocation } from 'react-router-dom'
 
@@ -25,8 +27,10 @@ function Copyright() {
 
 export default function App() {
   const location = useLocation()
+  const theme = useTheme()
   const { currentUser } = useAuth()
   const { height, width } = useWindowDimensions() //use window dimensions instead of 100vh for mobile
+  const mobile = useMediaQuery(theme.breakpoints.only('xs'))
 
   return (
     <Box height={height || '100vh'} overflow="hidden">
@@ -34,7 +38,13 @@ export default function App() {
       <Box
         display="flex"
         flexDirection="column"
-        height={currentUser ? 'calc(100% - 48px)' : '100%'} //subtract the height of the navbar
+        height={
+          currentUser
+            ? mobile
+              ? 'calc(100% - 48px)'
+              : 'calc(100% - 56px)'
+            : '100%'
+        } //subtract the height of the navbar
         overflow="hidden"
       >
         <AnimatePresence exitBeforeEnter initial={false}>

@@ -220,6 +220,35 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  function unlikeUser(user) {
+    if (userData.likedUsers.includes(user.userId)) {
+      firestore
+        .collection('users')
+        .doc(`${currentUser.uid}`)
+        .update({
+          likedUsers: firebase.firestore.FieldValue.arrayRemove(user.userId),
+        })
+        .then((result) => {
+          if (user.likedUsers.includes(currentUser.uid)) {
+            firestore
+              .collection('users')
+              .doc(`${currentUser.uid}`)
+              .collection('friends')
+              .doc(`${user.userId}`)
+              .delete()
+            firestore
+              .collection('users')
+              .doc(`${user.userId}`)
+              .collection('friends')
+              .doc(`${currentUser.uid}`)
+              .delete()
+          }
+        })
+        .catch((err) => console.error(err))
+    }
+    //need to handle messages here also
+  }
+
   function getFriendData(doc) {
     let idArray = []
     let addedOnArray = []
@@ -362,6 +391,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     likeUser,
+    unlikeUser,
     sendPrivateMessage,
     getInterestsData,
   }

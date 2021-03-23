@@ -25,7 +25,9 @@ const useStyles = makeStyles((theme) => ({
   page: {
     height: '100%',
     overflow: 'hidden',
-    padding: '24px 24px 24px 24px',
+    padding: '24px',
+    maxWidth: '1600px',
+    margin: '0 auto',
   },
   userList: {
     width: '100%',
@@ -74,8 +76,7 @@ const Messages = () => {
     <Grid
       container
       className={classes.page}
-      justify={'center'}
-      //alignItems={"stretch"}
+      justify="center"
       spacing={2}
       component={motion.div}
       variants={containerVariants}
@@ -95,9 +96,7 @@ const Messages = () => {
           lg={2}
           wrap="nowrap"
         >
-          {!friendsLoading && (
-            <FriendsList openUser={openUser} onClick={handleClick} />
-          )}
+          <FriendsList openUser={openUser} onClick={handleClick} />
         </Grid>
       )}
 

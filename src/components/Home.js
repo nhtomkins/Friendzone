@@ -38,9 +38,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 999,
   },
   modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    overflow: 'auto',
   },
   paper: {
     borderRadius: 12,
@@ -68,6 +66,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     flexWrap: 'wrap',
     marginBottom: '40px',
+  },
+  noOutline: {
+    outline: 0,
   },
 }))
 
@@ -178,12 +179,10 @@ const NoUserHome = () => {
       <Modal
         open={open}
         onClose={handleClose}
-        className={classes.Modal}
-        closeAfterTransition
+        className={classes.modal}
         BackdropComponent={Backdrop}
-        style={{ overflow: 'auto' }}
       >
-        <Container maxWidth="xs">
+        <Container className={classes.noOutline} maxWidth="xs">
           <Paper>{newuser ? <Signup /> : <Signin />}</Paper>
         </Container>
       </Modal>

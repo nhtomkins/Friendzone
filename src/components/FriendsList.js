@@ -74,27 +74,42 @@ const FriendsList = (props) => {
       className={classes.userList}
       wrap="nowrap"
     >
-      {friendsProfiles.map((profile, index) => (
-        <Grid item container key={index}>
-          <ButtonBase
-            onClick={() => props.onClick(profile)}
-            className={classes.userSelect}
-            style={
-              profile.userId === props.openUser.userId
-                ? { borderLeft: `3px solid ${theme.palette.secondary.main}` }
-                : { border: 'none' }
-            }
-          >
-            <FriendsListItem
-              {...profile}
-              {...reverseMessages.find(
-                ({ fromUserId, toUserId }) =>
-                  fromUserId === profile.userId || toUserId === profile.userId,
-              )}
-            />
-          </ButtonBase>
+      <Grid item>
+        <Typography variant="h6" align="center">
+          Friends
+        </Typography>
+        <Divider style={{ marginBottom: '4px' }} />
+      </Grid>
+      {friendsProfiles ? (
+        friendsProfiles.map((profile, index) => (
+          <Grid item container key={index}>
+            <ButtonBase
+              onClick={() => props.onClick(profile)}
+              className={classes.userSelect}
+              style={
+                profile.userId === props.openUser.userId
+                  ? { borderLeft: `3px solid ${theme.palette.secondary.main}` }
+                  : { border: 'none' }
+              }
+            >
+              <FriendsListItem
+                {...profile}
+                {...reverseMessages.find(
+                  ({ fromUserId, toUserId }) =>
+                    fromUserId === profile.userId ||
+                    toUserId === profile.userId,
+                )}
+              />
+            </ButtonBase>
+          </Grid>
+        ))
+      ) : (
+        <Grid item style={{ marginTop: '24px' }}>
+          <Typography variant="body1" align="center">
+            All the friends you make will show up here!
+          </Typography>
         </Grid>
-      ))}
+      )}
     </Grid>
   )
 }

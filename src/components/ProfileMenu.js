@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
@@ -20,10 +20,7 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(5),
     height: theme.spacing(5),
     border: '2px solid',
-    borderColor: '#FFFFFF',
-    '&:hover': {
-      borderColor: theme.palette.primary.main,
-    },
+    borderColor: theme.palette.primary.main,
   },
 }))
 
@@ -56,12 +53,14 @@ const ProfileMenu = () => {
 
   return (
     <div>
-      <Avatar
-        className={classes.profile}
-        onClick={handleClick}
-        alt={userData.firstname}
-        src={userData.profileImgUrl}
-      />
+      <IconButton size="small" onClick={handleClick}>
+        <Avatar
+          className={classes.profile}
+          alt={userData.firstname}
+          src={userData.profileImgUrl}
+        />
+      </IconButton>
+
       <Menu
         id="profile-menu"
         anchorEl={anchorEl}
