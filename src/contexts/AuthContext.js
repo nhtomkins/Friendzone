@@ -25,7 +25,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState()
-  const [userData, setUserData] = useState([])
+  const [userData, setUserData] = useState(null)
   const [allUsers, setAllUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [friendsLoading, setFriendsLoading] = useState(true)
@@ -50,6 +50,7 @@ export const AuthProvider = ({ children }) => {
           gender: userDetails.gender,
           city: userDetails.city,
           age: userAge,
+          checklist: {},
         })
       })
       .then(() => {
@@ -104,9 +105,12 @@ export const AuthProvider = ({ children }) => {
         let users = []
         data.forEach((doc) => {
           if (user.uid !== doc.id) {
-            users.push({
-              ...doc.data(),
-            })
+            const profile = doc.data()
+            if (profile.checklist?.complete) {
+              users.push({
+                ...profile,
+              })
+            }
           }
         })
         setAllUsers(users)
@@ -375,6 +379,45 @@ export const AuthProvider = ({ children }) => {
       return unsubscribe
     }
   }, [currentUser])
+
+  //check to see if profile is complete - move to cloud function at later date
+  useEffect(() => {
+    if (userData) {
+      let profileImage = false
+      let fiveInterests = false
+      let verified = false
+      let complete = false
+
+      if (userData.profileImgUrl) {
+        profileImage = true
+      }
+
+      if (
+        (userData.activities?.length || 0) +
+          (userData.lifestyle?.length || 0) +
+          (userData.movies?.length || 0) +
+          (userData.music?.length || 0) +
+          (userData.sports?.length || 0) >=
+        5
+      ) {
+        fiveInterests = true
+      }
+
+      if (profileImage && fiveInterests) {
+        complete = true
+      }
+      if (
+        userData.checklist?.profileImage != profileImage ||
+        userData.checklist?.fiveInterests != fiveInterests ||
+        userData.checklist?.complete != complete ||
+        !userData.hasOwnProperty('checklist')
+      ) {
+        writeUserData({
+          checklist: { profileImage, fiveInterests, verified, complete },
+        })
+      }
+    }
+  }, [userData])
 
   const value = {
     currentUser,

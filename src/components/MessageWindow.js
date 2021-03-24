@@ -33,11 +33,12 @@ const useStyles = makeStyles((theme) => ({
     height: '50px',
   },
   modal: {
-    padding: '60px 0',
+    height: '100%',
     overflow: 'auto',
   },
   noOutline: {
     outline: 0,
+    margin: '60px auto',
   },
 }))
 

@@ -114,11 +114,6 @@ const Signin = () => {
                 Forgot password?
               </Link>
             </Grid>
-            <Grid item>
-              <Link component={RouterLink} to="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
           </Grid>
         </form>
       </div>

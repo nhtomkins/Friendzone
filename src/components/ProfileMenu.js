@@ -56,8 +56,8 @@ const ProfileMenu = () => {
       <IconButton size="small" onClick={handleClick}>
         <Avatar
           className={classes.profile}
-          alt={userData.firstname}
-          src={userData.profileImgUrl}
+          alt={userData?.firstname}
+          src={userData?.profileImgUrl}
         />
       </IconButton>
 

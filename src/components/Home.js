@@ -23,19 +23,19 @@ import FitnessCenterIcon from '@material-ui/icons/FitnessCenter'
 
 const useStyles = makeStyles((theme) => ({
   title: {
-    marginTop: '60px',
+    //marginTop: '60px',
     marginBottom: '16px',
     color: theme.palette.primary.main,
   },
   subtitle: {
-    marginBottom: '40px',
+    //marginBottom: '40px',
   },
   homeButton: {
-    marginBottom: '10px',
     width: '150px',
     height: '50px',
     textTransform: 'none',
     borderRadius: 999,
+    margin: '5px',
   },
   modal: {
     overflow: 'auto',
@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '600px',
     boxShadow: '0 0 20px 0 rgba(0,0,0,0.2)',
     margin: '10px',
+    minHeight: '500px',
   },
   page: {
     height: '100%',
@@ -65,10 +66,15 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    marginBottom: '40px',
   },
   noOutline: {
     outline: 0,
+  },
+  buttonBox: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    minHeight: '135px',
   },
 }))
 
@@ -104,6 +110,7 @@ const NoUserHome = () => {
           item
           container
           alignItems="center"
+          justify="space-evenly"
           direction="column"
           className={classes.paper}
         >
@@ -151,7 +158,7 @@ const NoUserHome = () => {
               }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} className={classes.buttonBox}>
             <Button
               size="large"
               variant="contained"
@@ -162,8 +169,6 @@ const NoUserHome = () => {
             >
               sign up
             </Button>
-          </Grid>
-          <Grid item xs={12} style={{ marginBottom: '50px' }}>
             <Button
               size="large"
               variant="contained"

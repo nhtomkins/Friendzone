@@ -22,6 +22,8 @@ import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import FitnessCenterIcon from '@material-ui/icons/FitnessCenter'
 import ProfileInterestsSelect from './ProfileInterestsSelect'
 import ProfileImages from './ProfileImages'
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
+import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 
 const useStyles = makeStyles((theme) => ({
   spacedChips: {
@@ -33,12 +35,21 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     minWidth: 100,
   },
+  checklist: {
+    margin: theme.spacing(0.5),
+    background: '#fff',
+    padding: '8px 12px',
+    borderRadius: 12,
+    boxShadow: '0 4px 20px 0 rgba(0,0,0,0.12)',
+  },
   wrapIcon: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     display: 'flex',
-    marginTop: '4px',
-    marginBottom: '25px',
+    margin: '4px',
+  },
+  spacedIcon: {
+    marginRight: '4px',
   },
 }))
 
@@ -64,66 +75,13 @@ const containerVariants = {
   },
 }
 
-const subinterestVariants = {
-  from: {
-    opacity: 0,
-  },
-  to: {
-    x: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.15,
-      delay: 0.15,
-    },
-  },
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.15,
-    },
-  },
-}
-
 const Profile = () => {
   const classes = useStyles()
   const theme = useTheme()
-  const {
-    writeUserData,
-    userData,
-    updateUserProfileImg,
-    loadPercent,
-    getInterestsData,
-  } = useAuth()
+  const { writeUserData, userData, getInterestsData } = useAuth()
   const [error, setError] = useState(null)
   const [interestData, setInterestData] = useState(null)
   const [loading, setLoading] = useState(true)
-
-  const [lifestyle, setLifestyle] = useState([])
-  const [activities, setActivities] = useState([])
-  const [movies, setMovies] = useState([])
-  const [music, setMusic] = useState([])
-  const [sports, setSports] = useState([])
-
-  const allowedFileTypes = ['image/png', 'image/jpeg']
-
-  const uploadHandler = (e) => {
-    let selected = e.target.files[0]
-
-    if (selected && allowedFileTypes.includes(selected.type)) {
-      updateUserProfileImg(selected)
-      setError('')
-    } else {
-      setError('Please select an image file')
-    }
-  }
-
-  const handleSave = (e) => {
-    setLoading(true)
-
-    writeUserData({ lifestyle, activities, movies, music, sports }).then(() => {
-      setLoading(false)
-    })
-  }
 
   useEffect(() => {
     let interests = []
@@ -143,14 +101,14 @@ const Profile = () => {
     <Box
       style={{
         overflow: 'auto',
-        padding: '24px 8px 24px 8px',
+        padding: '24px 8px',
         overflowX: 'hidden',
       }}
     >
       <Container maxWidth="md" disableGutters>
         <Grid
           container
-          justify={'flex-start'}
+          justify="flex-start"
           spacing={4}
           component={motion.div}
           variants={containerVariants}
@@ -164,6 +122,44 @@ const Profile = () => {
                 <LineupProfile {...userData} forceMobile={true} />
               </Grid>
               <Grid item container direction="column" sm={6} xs={12}>
+                <Grid item className={classes.checklist}>
+                  <Typography variant="h5">Profile Checklist</Typography>
+                  <Typography variant="subtitle2">
+                    To make your profile visible to the world, you need to:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    style={{
+                      color: userData.checklist?.profileImage
+                        ? theme.palette.success.dark
+                        : theme.palette.error.main,
+                    }}
+                    className={classes.wrapIcon}
+                  >
+                    {userData.checklist?.profileImage ? (
+                      <CheckCircleOutlineIcon className={classes.spacedIcon} />
+                    ) : (
+                      <HighlightOffIcon className={classes.spacedIcon} />
+                    )}
+                    Upload a main profile image
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    style={{
+                      color: userData.checklist?.fiveInterests
+                        ? theme.palette.success.dark
+                        : theme.palette.error.main,
+                    }}
+                    className={classes.wrapIcon}
+                  >
+                    {userData.checklist?.fiveInterests ? (
+                      <CheckCircleOutlineIcon className={classes.spacedIcon} />
+                    ) : (
+                      <HighlightOffIcon className={classes.spacedIcon} />
+                    )}
+                    Select at least 5 interests (from any category)
+                  </Typography>
+                </Grid>
                 <Grid item container className={classes.spacedChips}>
                   <ProfileImages />
                 </Grid>

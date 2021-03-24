@@ -93,7 +93,7 @@ const Signup = () => {
         gender: selectedGender,
         city: selectedCity,
       })
-      history.push('/lineup')
+      history.push('/profile')
     } catch {
       setError('Failed to create an account')
     }
@@ -234,12 +234,6 @@ const Signup = () => {
                 inputRef={confirmPasswordRef}
               />
             </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
           </Grid>
           <Button
             type="submit"
@@ -251,13 +245,6 @@ const Signup = () => {
           >
             Sign Up
           </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link component={RouterLink} to="/signin" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
     </Container>

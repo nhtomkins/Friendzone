@@ -97,6 +97,7 @@ const ProfileInterestsSelect = (props) => {
   }
 
   const handleClickChip = (item) => {
+    console.log('handle click chip')
     if (interests.includes(item)) {
       setChanges(true)
       const newInterests = interests.filter((data) => data !== item)
@@ -109,9 +110,25 @@ const ProfileInterestsSelect = (props) => {
     }
   }
 
+  const handleHighlight = (item) => {
+    if (userData.highlights) {
+      if (
+        userData.highlights?.length < 5 &&
+        !userData.highlights.includes(item) &&
+        interests.includes(item)
+      ) {
+        const highlightArray = userData.highlights
+        highlightArray.push(item)
+        writeUserData({ highlights: highlightArray })
+      }
+    } else {
+      writeUserData({ highlights: [item] })
+    }
+  }
+
   const handleSave = (e) => {
     setLoading(true)
-
+    // need to check if interest removed was a highlight, if so remove highlight
     writeUserData({ [props.id]: interests }).then(() => {
       setChanges(false)
       setLoading(false)
@@ -208,8 +225,8 @@ const ProfileInterestsSelect = (props) => {
                     borderTopRightRadius: '12px',
                     borderBottomRightRadius: '12px',
                     boxShadow: '0 0 20px 0 rgba(0,0,0,0.12)',
-                    margin: '8px 4px 8px 4px',
-                    padding: '4px 8px 4px 8px',
+                    margin: '8px 4px',
+                    padding: '4px 8px',
                   }}
                   component={motion.div}
                   variants={subinterestVariants}
