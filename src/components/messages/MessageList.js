@@ -5,7 +5,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 
 import MessageBubble from './MessageBubble'
 
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 import { grey } from '@material-ui/core/colors'
 
 const useStyles = makeStyles((theme) => ({

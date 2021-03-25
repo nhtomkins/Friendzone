@@ -7,13 +7,13 @@ import Modal from '@material-ui/core/Modal'
 import Paper from '@material-ui/core/Paper'
 import Backdrop from '@material-ui/core/Backdrop'
 import Container from '@material-ui/core/Container'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 
 import { Link } from 'react-router-dom'
 
 import Signup from './Signup'
 import Signin from './Signin'
-import UserHome from './UserHome'
+import UserHome from '../UserHome'
 
 import LocalBarIcon from '@material-ui/icons/LocalBar'
 import LocalActivityIcon from '@material-ui/icons/LocalActivity'

@@ -19,10 +19,10 @@ import FormLabel from '@material-ui/core/FormLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import { Link as RouterLink, useHistory } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 
 import { KeyboardDatePicker } from '@material-ui/pickers'
-import getLocaleDateString from '../helpers/getLocaleDateString'
+import getLocaleDateString from '../../helpers/getLocaleDateString'
 
 const cities = ['Brisbane', 'Melbourne', 'Perth', 'Sydney']
 

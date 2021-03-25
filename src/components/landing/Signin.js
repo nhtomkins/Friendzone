@@ -14,7 +14,7 @@ import Container from '@material-ui/core/Container'
 import Alert from '@material-ui/lab/Alert'
 
 import { Link as RouterLink, useHistory } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 
 const useStyles = makeStyles((theme) => ({
   paper: {

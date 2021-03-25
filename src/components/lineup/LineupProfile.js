@@ -12,14 +12,14 @@ import PlaceIcon from '@material-ui/icons/Place'
 import ThumbUpIcon from '@material-ui/icons/ThumbUp'
 
 import { motion, useAnimation } from 'framer-motion'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { ExpandMore, FormatColorReset } from '@material-ui/icons'
 
-import { interests } from '../data/interestsdata'
+import { interests } from '../../data/interestsdata'
 import { Collapse } from '@material-ui/core'
-import ProfileInterests from './ProfileInterests'
+import ProfileInterests from '../profile/ProfileInterests'
 
 import LocalBarIcon from '@material-ui/icons/LocalBar'
 import LocalActivityIcon from '@material-ui/icons/LocalActivity'

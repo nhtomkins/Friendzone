@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 
 import LineupProfile from './LineupProfile'
 
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 import { Typography } from '@material-ui/core'
 import Chip from '@material-ui/core/Chip'
 import PeopleIcon from '@material-ui/icons/People'

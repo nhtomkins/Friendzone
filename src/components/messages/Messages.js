@@ -5,9 +5,9 @@ import { motion } from 'framer-motion'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import FriendsList from './FriendsList'
 import MessageWindow from './MessageWindow'
-import LineupProfile from './LineupProfile'
+import LineupProfile from '../lineup/LineupProfile'
 
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 import { grey } from '@material-ui/core/colors'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 

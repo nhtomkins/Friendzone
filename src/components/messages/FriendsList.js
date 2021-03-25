@@ -15,7 +15,7 @@ import Button from '@material-ui/core/Button'
 import Box from '@material-ui/core/Box'
 import FriendsListItem from './FriendsListItem'
 
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 import { grey } from '@material-ui/core/colors'
 
 const useStyles = makeStyles((theme) => ({

@@ -8,12 +8,12 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 import { Switch, Route, useLocation } from 'react-router-dom'
 
-import Header from './components/Header'
-import Lineup from './components/Lineup'
-import Messages from './components/Messages'
-import Home from './components/Home'
+import Header from './components/appbar/Header'
+import Lineup from './components/lineup/Lineup'
+import Messages from './components/messages/Messages'
+import Home from './components/landing/Home'
 import { useAuth } from './contexts/AuthContext'
-import Profile from './components/Profile'
+import Profile from './components/profile/Profile'
 import PrivateRoute from './components/PrivateRoute'
 import useWindowDimensions from './hooks/useWindowDimensions'
 

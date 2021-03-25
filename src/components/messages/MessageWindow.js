@@ -8,18 +8,12 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Box from '@material-ui/core/Box'
 import MessageList from './MessageList'
-import LineupProfile from './LineupProfile'
 
-import Avatar from '@material-ui/core/Avatar'
-import Modal from '@material-ui/core/Modal'
-import Container from '@material-ui/core/Container'
-import Backdrop from '@material-ui/core/Backdrop'
-import CloseIcon from '@material-ui/icons/Close'
-
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore'
 import IconButton from '@material-ui/core/IconButton'
+import LineupProfileModal from '../lineup/LineupProfileModal'
 
 const useStyles = makeStyles((theme) => ({
   messageBox: {
@@ -31,14 +25,6 @@ const useStyles = makeStyles((theme) => ({
   avatarLarge: {
     width: '50px',
     height: '50px',
-  },
-  modal: {
-    height: '100%',
-    overflow: 'auto',
-  },
-  noOutline: {
-    outline: 0,
-    margin: '60px auto',
   },
 }))
 
@@ -72,7 +58,6 @@ const MessageWindow = ({ openUser, onClick }) => {
   const messageRef = useRef()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [open, setOpen] = useState(false)
 
   async function handleSendMessage(e) {
     e.preventDefault()
@@ -87,14 +72,6 @@ const MessageWindow = ({ openUser, onClick }) => {
     }
 
     setLoading(false)
-  }
-
-  const handleOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
   }
 
   return (
@@ -120,13 +97,7 @@ const MessageWindow = ({ openUser, onClick }) => {
           style={{ paddingLeft: '8px', paddingRight: '8px' }}
         >
           <Grid item>
-            <IconButton aria-label="profile" size="medium" onClick={handleOpen}>
-              <Avatar
-                className={classes.avatarLarge}
-                alt={openUser.firstname}
-                src={openUser.profileImgUrl}
-              />
-            </IconButton>
+            <LineupProfileModal openUser={openUser} size="50px" />
           </Grid>
           <Grid item xs>
             <Typography variant="h2" display="inline">
@@ -187,30 +158,6 @@ const MessageWindow = ({ openUser, onClick }) => {
           </Box>
         </Grid>
       </Grid>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        className={classes.modal}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        BackdropComponent={Backdrop}
-      >
-        <Container className={classes.noOutline} maxWidth="xs">
-          <LineupProfile {...openUser} forceMobile={true} />
-          <IconButton
-            onClick={handleClose}
-            style={{
-              position: 'fixed',
-              top: '20px',
-              left: '20px',
-              zIndex: '2',
-              background: 'rgba(0,0,0,0.2)',
-            }}
-          >
-            <CloseIcon style={{ color: '#fff' }} />
-          </IconButton>
-        </Container>
-      </Modal>
     </>
   )
 }

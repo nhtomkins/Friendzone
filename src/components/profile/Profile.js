@@ -4,16 +4,17 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
 import { motion } from 'framer-motion'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 import { Input } from '@material-ui/core'
 import { MergeTypeSharp } from '@material-ui/icons'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import { interests } from '../data/interestsdata'
+import { interests } from '../../data/interestsdata'
 import Container from '@material-ui/core/Container'
 import Box from '@material-ui/core/Box'
 import Grow from '@material-ui/core/Grow'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 
-import LineupProfile from './LineupProfile'
+import LineupProfile from '../lineup/LineupProfile'
 
 import LocalBarIcon from '@material-ui/icons/LocalBar'
 import LocalActivityIcon from '@material-ui/icons/LocalActivity'
@@ -24,6 +25,7 @@ import ProfileInterestsSelect from './ProfileInterestsSelect'
 import ProfileImages from './ProfileImages'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
+import LineupProfileModal from '../lineup/LineupProfileModal'
 
 const useStyles = makeStyles((theme) => ({
   spacedChips: {
@@ -82,6 +84,7 @@ const Profile = () => {
   const [error, setError] = useState(null)
   const [interestData, setInterestData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const mobile = useMediaQuery(theme.breakpoints.only('xs'))
 
   useEffect(() => {
     let interests = []
@@ -108,7 +111,7 @@ const Profile = () => {
       <Container maxWidth="md" disableGutters>
         <Grid
           container
-          justify="flex-start"
+          justify="center"
           spacing={4}
           component={motion.div}
           variants={containerVariants}
@@ -118,9 +121,28 @@ const Profile = () => {
         >
           {!loading && (
             <>
-              <Grid item sm={6} xs={12}>
-                <LineupProfile {...userData} forceMobile={true} />
-              </Grid>
+              {mobile ? (
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  direction="column"
+                  xs={12}
+                >
+                  <Grid item>
+                    <LineupProfileModal openUser={userData} size="120px" />
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="h6" align="center">
+                      {userData.firstname}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              ) : (
+                <Grid item sm={6} xs={12}>
+                  <LineupProfile {...userData} forceMobile={true} />
+                </Grid>
+              )}
               <Grid item container direction="column" sm={6} xs={12}>
                 <Grid item className={classes.checklist}>
                   <Typography variant="h5">Profile Checklist</Typography>
