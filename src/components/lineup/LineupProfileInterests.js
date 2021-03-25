@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton'
 import ButtonBase from '@material-ui/core/ButtonBase'
 import Divider from '@material-ui/core/Divider'
 import Chip from '@material-ui/core/Chip'
+import { useAuth } from '../../contexts/AuthContext'
 
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { Autocomplete } from '@material-ui/lab'
@@ -72,10 +73,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ProfileInterests = (props) => {
+const LineupProfileInterests = (props) => {
   const classes = useStyles()
   const theme = useTheme()
   const mobile = useMediaQuery(theme.breakpoints.only('xs'))
+  const { userData } = useAuth()
 
   return (
     <Grid container justify="center">
@@ -163,6 +165,10 @@ const ProfileInterests = (props) => {
               variant="outlined"
               style={{
                 margin: '4px',
+                backgroundColor:
+                  !props.noBackground && userData[props.id]?.includes(interest)
+                    ? theme.palette[props.id].main
+                    : 'inherit',
                 borderColor: theme.palette[props.id].main,
               }}
             />
@@ -173,4 +179,4 @@ const ProfileInterests = (props) => {
   )
 }
 
-export default ProfileInterests
+export default LineupProfileInterests

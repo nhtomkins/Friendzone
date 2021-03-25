@@ -26,6 +26,7 @@ import ProfileImages from './ProfileImages'
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import LineupProfileModal from '../lineup/LineupProfileModal'
+import ProfileHighlightsSelect from './ProfileHighlightsSelect'
 
 const useStyles = makeStyles((theme) => ({
   spacedChips: {
@@ -181,6 +182,22 @@ const Profile = () => {
                     )}
                     Select at least 5 interests (from any category)
                   </Typography>
+                  <Typography
+                    variant="body1"
+                    style={{
+                      color: userData.checklist?.fiveHighlights
+                        ? theme.palette.success.dark
+                        : theme.palette.error.main,
+                    }}
+                    className={classes.wrapIcon}
+                  >
+                    {userData.checklist?.fiveHighlights ? (
+                      <CheckCircleOutlineIcon className={classes.spacedIcon} />
+                    ) : (
+                      <HighlightOffIcon className={classes.spacedIcon} />
+                    )}
+                    Pick 5 interests to highlight on your profile
+                  </Typography>
                 </Grid>
                 <Grid item container className={classes.spacedChips}>
                   <ProfileImages />
@@ -191,6 +208,9 @@ const Profile = () => {
                       <ProfileInterestsSelect {...cat} />
                     </Grid>
                   ))}
+                </Grid>
+                <Grid item container className={classes.spacedChips}>
+                  <ProfileHighlightsSelect />
                 </Grid>
               </Grid>
             </>

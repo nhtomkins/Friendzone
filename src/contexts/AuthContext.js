@@ -385,6 +385,7 @@ export const AuthProvider = ({ children }) => {
     if (userData) {
       let profileImage = false
       let fiveInterests = false
+      let fiveHighlights = false
       let verified = false
       let complete = false
 
@@ -403,17 +404,28 @@ export const AuthProvider = ({ children }) => {
         fiveInterests = true
       }
 
-      if (profileImage && fiveInterests) {
+      if (userData.highlights?.length === 5) {
+        fiveHighlights = true
+      }
+
+      if (profileImage && fiveInterests && fiveHighlights) {
         complete = true
       }
       if (
         userData.checklist?.profileImage != profileImage ||
         userData.checklist?.fiveInterests != fiveInterests ||
+        userData.checklist?.fiveHighlights != fiveHighlights ||
         userData.checklist?.complete != complete ||
         !userData.hasOwnProperty('checklist')
       ) {
         writeUserData({
-          checklist: { profileImage, fiveInterests, verified, complete },
+          checklist: {
+            profileImage,
+            fiveInterests,
+            fiveHighlights,
+            verified,
+            complete,
+          },
         })
       }
     }
